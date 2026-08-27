@@ -1,0 +1,237 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" xmlns:crs="http://araic.asus.com/xmlns/crs" name="virgo_common">
+  <xacro:include filename="inertia_macros.xacro" />
+
+  <xacro:macro name="materials">    
+    <material name="carbon_fiber">
+      <color rgba="0.2 0.2 0.2 1" />
+    </material>
+    <material name="pcb_green">
+      <color rgba="0.1 0.5 0.1 1" />
+    </material>
+    <material name="plastic_black">
+      <color rgba="0.1 0.1 0.1 1" />
+    </material>
+    <material name="plastic_gray">
+      <color rgba="0.4 0.4 0.4 1" />
+    </material>
+    <material name="lens_blue">
+      <color rgba="0.2 0.4 0.8 1" />
+    </material>
+    <material name="prop_red">
+      <color rgba="0.8 0.1 0.1 0.7" />
+    </material>
+    <material name="prop_black">
+      <color rgba="0.1 0.1 0.1 0.7" />
+    </material>
+    <material name="metal_gray">
+      <color rgba="0.6 0.6 0.6 1" />
+    </material>
+    <material name="sensor_gold">
+      <color rgba="0.8 0.7 0.2 1" />
+    </material>
+    <material name="debug">
+      <color rgba="1.0 0.0 1.0 1" />
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="com_frame" params="name suffix:='' parent xyz:='0 0 0' rpy:='0 0 0'">
+    <link name="${name}${suffix}_com_frame">
+      <crs:description>
+        <crs:name>Center of Mass (CoM) Frame</crs:name>
+        <crs:purpose>
+          The point where the total mass of the system can be considered to be concentrated.
+        </crs:purpose>
+        <crs:authority>Virgo ME</crs:authority>
+        <crs:origin>
+          Defined as a separate reference component in the drone/gimbal assembly.
+        </crs:origin>
+        <crs:orientation>
+          Following FRD (Front-Right-Down) convention.
+        </crs:orientation>
+      </crs:description>
+      <visual>
+        <geometry>
+          <sphere radius="0.015" />
+        </geometry>
+        <material name="lens_blue" />
+      </visual>
+    </link>
+    <joint name="${name}${suffix}_com_j" type="fixed">
+      <parent link="${parent}" />
+      <child link="${name}${suffix}_com_frame" />
+      <origin xyz="${xyz}" rpy="${rpy}" />
+    </joint>
+
+    <link name="${name}${suffix}_px_drone_body_frame">
+      <crs:description>
+        <crs:name>PX4 Drone Body Frame</crs:name>
+        <crs:purpose>
+          Reference frame used in PX4 flight control software, located at CoM (FRD).
+        </crs:purpose>
+        <crs:authority>Virgo ME</crs:authority>
+        <crs:origin>
+          Alias for com_frame.
+        </crs:origin>
+        <crs:orientation>
+          Front-Right-Down.
+        </crs:orientation>
+      </crs:description>
+    </link>
+    <joint name="${name}${suffix}_px_drone_body_j" type="fixed">
+      <parent link="${name}${suffix}_com_frame" />
+      <child link="${name}${suffix}_px_drone_body_frame" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="pcb_link" params="name suffix:='' parent size:='0.04 0.04 0.002' xyz:='0 0 0' rpy:='0 0 0'">
+    <link name="${name}${suffix}_pcb_link">
+      <crs:description>
+        <crs:name>PCB Links</crs:name>
+        <crs:purpose>
+          Printed Circuit Board-fixed CRS for sensor payload integration.
+        </crs:purpose>
+        <crs:authority>Virgo EE</crs:authority>
+        <crs:origin>
+          Geometric center of PCB.
+        </crs:origin>
+        <crs:orientation>
+          Forward (X), Right (Y), Down (Z)
+        </crs:orientation>
+      </crs:description>
+      <visual>
+        <geometry>
+          <box size="${size}" />
+        </geometry>
+        <material name="pcb_green" />
+      </visual>
+    </link>
+    <joint name="${name}${suffix}_pcb_j" type="fixed">
+      <parent link="${parent}" />
+      <child link="${name}${suffix}_pcb_link" />
+      <origin xyz="${xyz}" rpy="${rpy}" />
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="sensor_frame" params="name suffix:='' parent xyz_hw:='0 0 0' rpy_hw:='0 0 0' xyz_nav:='0 0 0' rpy_nav:='0 0 0' material:='sensor_gold'">
+    <link name="${name}${suffix}_hw_frame">
+      <crs:description>
+        <crs:name>Hardware Internal Sensor Frames</crs:name>
+        <crs:purpose>
+          Hardware-aligned internal sensor frame for sensor mounted on PCB.
+        </crs:purpose>
+        <crs:authority>Virgo EE</crs:authority>
+        <crs:origin>
+          Geometric center of sensor package.
+        </crs:origin>
+        <crs:orientation>
+          Aligned with sensor datasheet internal axes.
+        </crs:orientation>
+      </crs:description>
+      <visual>
+        <geometry>
+          <box size="0.005 0.005 0.002" />
+        </geometry>
+        <material name="${material}" />
+      </visual>
+    </link>
+    <joint name="${name}${suffix}_hw_j" type="fixed">
+      <parent link="${parent}" />
+      <child link="${name}${suffix}_hw_frame" />
+      <origin xyz="${xyz_hw}" rpy="${rpy_hw}" />
+    </joint>
+
+    <link name="${name}${suffix}_nav_frame">
+      <crs:description>
+        <crs:name>Navigation Sensor Frames</crs:name>
+        <crs:purpose>
+          Navigation-aligned sensor frame imposed by flight software drivers.
+        </crs:purpose>
+        <crs:authority>Virgo BSP</crs:authority>
+        <crs:origin>
+          Same origin as hardware frame.
+        </crs:origin>
+        <crs:orientation>
+          Aligned or rotated per navigation software convention.
+        </crs:orientation>
+      </crs:description>
+    </link>
+    <joint name="${name}${suffix}_nav_j" type="fixed">
+      <parent link="${name}${suffix}_hw_frame" />
+      <child link="${name}${suffix}_nav_frame" />
+      <origin xyz="${xyz_nav}" rpy="${rpy_nav}" />
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="lrf_frame" params="name suffix:='' parent xyz_hw:='0 0 0' rpy_hw:='0 0 0' xyz_nav:='0 0 0' rpy_nav:='0 0 0' ">
+    <crs:description>
+      <crs:name>Laser Range Finder Frame</crs:name>
+      <crs:purpose>
+        LRF-aligned sensor frame for range finding optics.
+      </crs:purpose>
+      <crs:authority>Virgo EE</crs:authority>
+      <crs:origin>
+        Geometrical center of dividing line between emitter and receiver.
+      </crs:origin>
+      <crs:orientation>
+        X: Range beam output direction; Z: Down along divider; Y: Right-hand rule (Z x X).
+      </crs:orientation>
+    </crs:description>
+    <xacro:sensor_frame name="${name}lrf" suffix="${suffix}" parent="${parent}" xyz_hw="${xyz_hw}" rpy_hw="${rpy_hw}" xyz_nav="${xyz_nav}" rpy_nav="${rpy_nav}" material="plastic_black" />
+  </xacro:macro>
+
+  <xacro:macro name="camera_with_cv" params="name parent xyz:='0 0 0' rpy:='0 0 0' radius:='0.005' length:='0.01' mass:='0.02' material:='lens_blue'">
+    <link name="${name}_link">
+      <crs:description>
+        <crs:name>Camera Link (Optical Frame)</crs:name>
+        <crs:purpose>
+          Camera optical link with X axis pointing in camera forward direction (optical axis).
+        </crs:purpose>
+        <crs:authority>Virgo DIT</crs:authority>
+        <crs:origin>
+          Geometric center of physical image sensor grid.
+        </crs:origin>
+        <crs:orientation>
+          X: Forward (optical axis), Y: Right, Z: Down.
+        </crs:orientation>
+      </crs:description>
+      <visual>
+        <origin xyz="0.005 0 0" rpy="0 1.5708 0" />
+        <geometry>
+          <cylinder radius="${radius}" length="${length}" />
+        </geometry>
+        <material name="${material}" />
+      </visual>
+      <xacro:cylinder_inertial mass="${mass}" r="${radius}" l="${length}" xyz="0.005 0 0" rpy="0 1.5708 0" />
+    </link>
+    <joint name="${name}_j" type="fixed">
+      <parent link="${parent}" />
+      <child link="${name}_link" />
+      <origin xyz="${xyz}" rpy="${rpy}" />
+    </joint>
+
+    <link name="${name}_cv_frame">
+      <crs:description>
+        <crs:name>Camera Computer Vision Frame</crs:name>
+        <crs:purpose>
+          Standard computer vision frame convention where Z axis is depth (optical axis), X axis is right, Y axis is down.
+        </crs:purpose>
+        <crs:authority>Virgo DIT</crs:authority>
+        <crs:origin>
+          Optical pinhole / focal point center.
+        </crs:origin>
+        <crs:orientation>
+          Z: Depth (optical axis), X: Right, Y: Down.
+          Transformation from optical frame to CV frame: R = Roll(-pi/2) * Pitch(0) * Yaw(-pi/2).
+        </crs:orientation>
+      </crs:description>
+    </link>
+    <joint name="${name}_cv_j" type="fixed">
+      <parent link="${name}_link" />
+      <child link="${name}_cv_frame" />
+      <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708" />
+    </joint>
+  </xacro:macro>
+
+</robot>

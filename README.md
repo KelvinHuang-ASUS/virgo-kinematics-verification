@@ -48,6 +48,8 @@ The entire compilation and rendering workflow is powered by the **ROS 2 native r
 
 Dedicated sandbox environments are established under the `experiments/` directory to allow iterative tuning and testing of physical dynamics, reference frames, and visual properties without altering baseline models:
 
-- **[Gimbal Inertia Tuning Sandbox](experiments/gimbal_inertia_tuning/)**: Standalone workspace for closed-form rigid body inertia parameter calculation, COM alignment, and camera/LRF sensor frame rotation matrix validation.
+- **[01. Inertia Macros & Setup](experiments/01_inertia_macros_setup/)**: Standalone workspace for closed-form rigid body inertia parameter calculation, COM alignment, and camera/LRF sensor frame rotation matrix validation.
+- **[02. Joint Limits & Dynamics](experiments/02_joint_limits_and_dynamics/)**: Mechanical range boundaries (`revolute` joints), angular limits ($\pm 160^\circ$ Yaw, $\pm 45^\circ$ Roll, $-90^\circ / +45^\circ$ Pitch), and joint dynamics (damping & friction).
+
 
 

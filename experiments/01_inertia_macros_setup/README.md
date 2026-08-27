@@ -1,4 +1,4 @@
-# Gimbal Inertia Tuning Sandbox
+# Experiment 01: Inertia Macros & Setup
 
 ## Overview
 This experimental workspace provides an isolated environment for tuning, verifying, and validating physical inertia parameters, center-of-mass (COM) offsets, and coordinate reference frames for the **Virgo 3-Axis Gimbal Payload Assembly**.
@@ -9,7 +9,7 @@ By maintaining this standalone experiment workspace, all model iterations and pa
 
 ## Directory Structure
 ```
-experiments/gimbal_inertia_tuning/
+experiments/01_inertia_macros_setup/
 ├── virgo_gimbal.urdf.xacro      # Top-level Xacro entrypoint
 ├── README.md                    # Technical documentation & usage instructions
 └── xacro/
@@ -46,7 +46,7 @@ All 8 physical links in `virgo_gimbal.xacro` (`gimbal_base_link`, `gimbal_mnt_li
 To expand Xacro templates into compiled URDF XML and render the kinematic TF tree topology:
 
 ```bash
-python3 scripts/generate_topology.py experiments/gimbal_inertia_tuning/virgo_gimbal.urdf.xacro output
+python3 scripts/generate_topology.py experiments/01_inertia_macros_setup/virgo_gimbal.urdf.xacro output
 ```
 
 ### Verification Artifacts Generated

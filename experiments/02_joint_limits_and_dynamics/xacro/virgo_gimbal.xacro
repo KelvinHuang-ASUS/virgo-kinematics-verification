@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="virgo_gimbal">
+  <xacro:include filename="virgo_common.xacro" />
+
+  <xacro:macro name="virgo_gimbal" params="prefix:=''">
+    <!-- 1. Base Link -->
+    <link name="${prefix}gimbal_base_link">
+      <visual>
+        <origin xyz="0 0 0.005" rpy="0 0 0" />
+        <geometry>
+          <box size="0.05 0.05 0.01" />
+        </geometry>
+        <material name="carbon_fiber" />
+      </visual>
+      <xacro:box_inertial mass="0.05" x="0.05" y="0.05" z="0.01" xyz="0 0 0.005" rpy="0 0 0" />
+    </link>
+
+    <!-- 2. Mount Link -->
+    <link name="${prefix}gimbal_mnt_link">
+      <visual>
+        <origin xyz="0.03 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.06 0.08 0.06" />
+        </geometry>
+        <material name="metal_gray" />
+      </visual>
+      <xacro:box_inertial mass="0.15" x="0.06" y="0.08" z="0.06" xyz="0.03 0 0" rpy="0 0 0" />
+    </link>
+    <joint name="${prefix}j_gimbal_mnt" type="fixed">
+      <child link="${prefix}gimbal_base_link" />
+      <parent link="${prefix}gimbal_mnt_link" />
+      <origin xyz="0.02 0 0" rpy="0 0 0" />
+    </joint>
+
+    <!-- Virtual Mount Frame Link (No mass/geometry) -->
+    <link name="${prefix}gimbal_mnt_frame_child" />
+    <joint name="${prefix}j_gimbal_mnt_frame_child" type="fixed">
+      <child link="${prefix}gimbal_mnt_link" />
+      <parent link="${prefix}gimbal_mnt_frame_child" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+    <!-- 3. Suspension Link -->
+    <link name="${prefix}gimbal_susp_link">
+      <visual>
+        <origin xyz="0 0 -0.005" rpy="0 0 0" />
+        <geometry>
+          <box size="0.04 0.04 0.01" />
+        </geometry>
+        <material name="metal_gray" />
+      </visual>
+      <xacro:box_inertial mass="0.03" x="0.04" y="0.04" z="0.01" xyz="0 0 -0.005" rpy="0 0 0" />
+    </link>
+    <joint name="${prefix}j_gimbal_susp" type="fixed">
+      <parent link="${prefix}gimbal_base_link" />
+      <child link="${prefix}gimbal_susp_link" />
+      <origin xyz="0 0 0.02" rpy="0 0 0" />
+    </joint>
+
+    <!-- 4. Motor 3 (Yaw) Link -->
+    <link name="${prefix}gimbal_motor_3_link">
+      <visual>
+        <geometry>
+          <cylinder radius="0.015" length="0.02" />
+        </geometry>
+        <material name="plastic_black" />
+      </visual>
+      <xacro:cylinder_inertial mass="0.08" r="0.015" l="0.02" xyz="0 0 0" rpy="0 0 0" />
+    </link>
+    <joint name="${prefix}j_gimbal_motor_3" type="revolute">
+      <parent link="${prefix}gimbal_susp_link" />
+      <child link="${prefix}gimbal_motor_3_link" />
+      <origin xyz="0 0 0.02" rpy="0 0 0" />
+      <axis xyz="0 0 1" />
+      <limit lower="-2.79253" upper="2.79253" effort="1.5" velocity="6.28319" />
+      <dynamics damping="0.05" friction="0.01" />
+    </joint>
+
+    <!-- 5. Motor 2 (Roll) Link -->
+    <link name="${prefix}gimbal_motor_2_link">
+      <visual>
+        <geometry>
+          <cylinder radius="0.015" length="0.02" />
+        </geometry>
+        <material name="plastic_black" />
+      </visual>
+      <visual>
+        <origin xyz="0.01 -0.02 -0.025" rpy="0.785 0 0" />
+        <geometry>
+          <box size="0.01 0.01 0.06" />
+        </geometry>
+        <material name="metal_gray" />
+      </visual>
+      <xacro:box_inertial mass="0.09" x="0.03" y="0.04" z="0.06" xyz="0.005 -0.01 -0.0125" rpy="0 0 0" />
+    </link>
+    <joint name="${prefix}j_gimbal_motor_2" type="revolute">
+      <parent link="${prefix}gimbal_motor_3_link" />
+      <child link="${prefix}gimbal_motor_2_link" />
+      <origin xyz="-0.02 0.04 0.05" rpy="0.785 0 0" />
+      <axis xyz="0 0 1" />
+      <limit lower="-0.7854" upper="0.7854" effort="1.2" velocity="6.28319" />
+      <dynamics damping="0.05" friction="0.01" />
+    </joint>
+
+    <!-- 6. Motor 1 (Pitch) Link -->
+    <link name="${prefix}gimbal_motor_1_link">
+      <visual>
+        <geometry>
+          <cylinder radius="0.015" length="0.02" />
+        </geometry>
+        <material name="plastic_black" />
+      </visual>
+      <visual>
+        <origin xyz="-0.025 0.01 -0.015" rpy="0 -0.785 0" />
+        <geometry>
+          <box size="0.01 0.01 0.06" />
+        </geometry>
+        <material name="metal_gray" />
+      </visual>
+      <xacro:box_inertial mass="0.09" x="0.05" y="0.03" z="0.05" xyz="-0.0125 0.005 -0.0075" rpy="0 0 0" />
+    </link>
+    <joint name="${prefix}j_gimbal_motor_1" type="revolute">
+      <parent link="${prefix}gimbal_motor_2_link" />
+      <child link="${prefix}gimbal_motor_1_link" />
+      <origin xyz="0.05 -0.02 0.03" rpy="0 -0.785 0" />
+      <axis xyz="0 0 1" />
+      <limit lower="-1.5708" upper="0.7854" effort="1.2" velocity="6.28319" />
+      <dynamics damping="0.05" friction="0.01" />
+    </joint>
+
+    <!-- 7. Ambarella Board Link -->
+    <link name="${prefix}gimbal_amba_bd_link">
+      <visual>
+        <geometry>
+          <box size="0.05 0.07 0.002" />
+        </geometry>
+        <material name="pcb_green" />
+      </visual>
+      <xacro:box_inertial mass="0.04" x="0.05" y="0.07" z="0.002" xyz="0 0 0" rpy="0 0 0" />
+    </link>
+    <joint name="${prefix}j_gimbal_amba_bd" type="fixed">
+      <parent link="${prefix}gimbal_mnt_link" />
+      <child link="${prefix}gimbal_amba_bd_link" />
+      <origin xyz="0.03 0 0.02" rpy="0 0 0" />
+    </joint>
+
+    <!-- Camera Payload Suite (Wide, Narrow, Tele, Thermal) -->
+    <xacro:camera_with_cv name="${prefix}cam_wide" parent="${prefix}gimbal_amba_bd_link" xyz="0.03 0.02 0" radius="0.008" mass="0.025" />
+    <xacro:camera_with_cv name="${prefix}cam_narrow" parent="${prefix}gimbal_amba_bd_link" xyz="0.03 0 0" mass="0.02" />
+    <xacro:camera_with_cv name="${prefix}cam_tele" parent="${prefix}gimbal_amba_bd_link" xyz="0.03 -0.02 0" radius="0.012" length="0.02" mass="0.04" />
+    <xacro:camera_with_cv name="${prefix}cam_thermal" parent="${prefix}gimbal_amba_bd_link" xyz="0.03 -0.04 0" radius="0.006" mass="0.02" material="plastic_black" />
+
+    <!-- 8. Laser Range Finder Link -->
+    <link name="${prefix}lrf_gimbal_frame">
+      <visual>
+        <origin xyz="0.005 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.01 0.01" />
+        </geometry>
+        <material name="sensor_gold" />
+      </visual>
+      <xacro:box_inertial mass="0.01" x="0.01" y="0.01" z="0.01" xyz="0.005 0 0" rpy="0 0 0" />
+    </link>
+    <joint name="${prefix}j_lrf_gimbal" type="fixed">
+      <parent link="${prefix}gimbal_amba_bd_link" />
+      <child link="${prefix}lrf_gimbal_frame" />
+      <origin xyz="0.03 0.04 0" rpy="0 0 0" />
+    </joint>
+  </xacro:macro>
+</robot>
