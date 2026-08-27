@@ -19,12 +19,20 @@ In this workspace, `requirements.txt` intentionally contains only `xacro>=2.0.0`
 2. Virtual environment: `python3 -m venv .venv && source .venv/bin/activate`
 3. Python dependencies: `pip install -r requirements.txt`
 
-## 4. Toolchain Verification Checklist
+## 4. IDE Integration (VS Code Workspace)
+The repository includes `.vscode/settings.json` to streamline the development workflow:
+- **Automatic Virtual Environment Binding**: Configured `python.defaultInterpreterPath` points directly to `${workspaceFolder}/.venv/bin/python`.
+- **Auto Environment Activation**: Terminal instances opened within VS Code automatically activate `.venv`.
+- **File Auto-Save**: Enabled `files.autoSave` with short delay to maintain synchronization.
+
+![VS Code Workspace Configuration](images/04_vscode_workspace_env.png)
+
+## 5. Toolchain Verification Checklist
 - Verify parser CLI: `urdf_to_graphviz 2>&1 | head -n 2`
 - Verify Graphviz engine: `dot -V`
 - Verify Python Xacro: `python3 -c "import xacro; print(xacro.__file__)"`
 
-## 5. Execution Workflow
+## 6. Execution Workflow
 Run the automated pipeline script:
 ```bash
 python3 scripts/generate_topology.py src/urdf/orion-urdf-model/orion_gimbal.urdf.xacro output
