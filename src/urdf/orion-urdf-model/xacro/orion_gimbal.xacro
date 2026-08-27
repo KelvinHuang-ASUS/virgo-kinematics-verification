@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="orion_gimbal">
+  <xacro:include filename="orion_common.xacro" />
+
+  <xacro:macro name="orion_gimbal" params="prefix:=''">
+    <link name="${prefix}gimbal_base_link">
+      <visual>
+        <origin xyz="0 0 0.005" rpy="0 0 0" />
+        <geometry>
+          <box size="0.05 0.05 0.01" />
+        </geometry>
+        <material name="carbon_fiber" />
+      </visual>
+    </link>
+
+    <link name="${prefix}gimbal_mnt_link">
+      <visual>
+        <origin xyz="0.03 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.06 0.08 0.06" />
+        </geometry>
+        <material name="metal_gray" />
+      </visual>
+    </link>
+    <joint name="${prefix}j_gimbal_mnt" type="fixed">
+      <child link="${prefix}gimbal_base_link" />
+      <parent link="${prefix}gimbal_mnt_link" />
+      <origin xyz="0.02 0 0" rpy="0 0 0" />
+    </joint>
+
+    <link name="${prefix}gimbal_mnt_frame_child" />
+    <joint name="${prefix}j_gimbal_mnt_frame_child" type="fixed">
+      <child link="${prefix}gimbal_mnt_link" />
+      <parent link="${prefix}gimbal_mnt_frame_child" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+    <link name="${prefix}gimbal_susp_link">
+      <visual>
+        <origin xyz="0 0 -0.005" rpy="0 0 0" />
+        <geometry>
+          <box size="0.04 0.04 0.01" />
+        </geometry>
+        <material name="metal_gray" />
+      </visual>
+    </link>
+    <joint name="${prefix}j_gimbal_susp" type="fixed">
+      <parent link="${prefix}gimbal_base_link" />
+      <child link="${prefix}gimbal_susp_link" />
+      <origin xyz="0 0 0.02" rpy="0 0 0" />
+    </joint>
+
+    <link name="${prefix}gimbal_motor_3_link">
+      <visual>
+        <geometry>
+          <cylinder radius="0.015" length="0.02" />
+        </geometry>
+        <material name="plastic_black" />
+      </visual>
+    </link>
+    <joint name="${prefix}j_gimbal_motor_3" type="continuous">
+      <parent link="${prefix}gimbal_susp_link" />
+      <child link="${prefix}gimbal_motor_3_link" />
+      <origin xyz="0 0 0.02" rpy="0 0 0" />
+      <axis xyz="0 0 1" />
+    </joint>
+
+    <link name="${prefix}gimbal_motor_2_link">
+      <visual>
+        <geometry>
+          <cylinder radius="0.015" length="0.02" />
+        </geometry>
+        <material name="plastic_black" />
+      </visual>
+      <visual>
+        <origin xyz="0.01 -0.02 -0.025" rpy="0.785 0 0" />
+        <geometry>
+          <box size="0.01 0.01 0.06" />
+        </geometry>
+        <material name="metal_gray" />
+      </visual>
+    </link>
+    <joint name="${prefix}j_gimbal_motor_2" type="continuous">
+      <parent link="${prefix}gimbal_motor_3_link" />
+      <child link="${prefix}gimbal_motor_2_link" />
+      <origin xyz="-0.02 0.04 0.05" rpy="0.785 0 0" />
+      <axis xyz="0 0 1" />
+    </joint>
+
+    <link name="${prefix}gimbal_motor_1_link">
+      <visual>
+        <geometry>
+          <cylinder radius="0.015" length="0.02" />
+        </geometry>
+        <material name="plastic_black" />
+      </visual>
+      <visual>
+        <origin xyz="-0.025 0.01 -0.015" rpy="0 -0.785 0" />
+        <geometry>
+          <box size="0.01 0.01 0.06" />
+        </geometry>
+        <material name="metal_gray" />
+      </visual>
+    </link>
+    <joint name="${prefix}j_gimbal_motor_1" type="continuous">
+      <parent link="${prefix}gimbal_motor_2_link" />
+      <child link="${prefix}gimbal_motor_1_link" />
+      <origin xyz="0.05 -0.02 0.03" rpy="0 -0.785 0" />
+      <axis xyz="0 0 1" />
+    </joint>
+
+    <link name="${prefix}gimbal_amba_bd_link">
+      <visual>
+        <geometry>
+          <box size="0.05 0.07 0.002" />
+        </geometry>
+        <material name="pcb_green" />
+      </visual>
+    </link>
+    <joint name="${prefix}j_gimbal_amba_bd" type="fixed">
+      <parent link="${prefix}gimbal_mnt_link" />
+      <child link="${prefix}gimbal_amba_bd_link" />
+      <origin xyz="0.03 0 0.02" rpy="0 0 0" />
+    </joint>
+
+    <xacro:camera_with_cv name="${prefix}cam_wide" parent="${prefix}gimbal_amba_bd_link" xyz="0.03 0.02 0" radius="0.008" />
+    <xacro:camera_with_cv name="${prefix}cam_narrow" parent="${prefix}gimbal_amba_bd_link" xyz="0.03 0 0" />
+    <xacro:camera_with_cv name="${prefix}cam_tele" parent="${prefix}gimbal_amba_bd_link" xyz="0.03 -0.02 0" radius="0.012" length="0.02" />
+    <xacro:camera_with_cv name="${prefix}cam_thermal" parent="${prefix}gimbal_amba_bd_link" xyz="0.03 -0.04 0" radius="0.006" material="plastic_black" />
+
+    <link name="${prefix}lrf_gimbal_frame">
+      <visual>
+        <origin xyz="0.005 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.01 0.01" />
+        </geometry>
+        <material name="sensor_gold" />
+      </visual>
+    </link>
+    <joint name="${prefix}j_lrf_gimbal" type="fixed">
+      <parent link="${prefix}gimbal_amba_bd_link" />
+      <child link="${prefix}lrf_gimbal_frame" />
+      <origin xyz="0.03 0.04 0" rpy="0 0 0" />
+    </joint>
+  </xacro:macro>
+</robot>

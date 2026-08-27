@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="orion_drone">
+  <xacro:include filename="orion_common.xacro" />
+  <xacro:include filename="orion_components.xacro" />
+
+  <xacro:macro name="orion_drone" params="prefix:=''" >
+    <!-- The airframe serves as the root of the overall assembly -->
+    <xacro:airframe prefix="${prefix}airframe_" />
+
+    <!-- The Center of Mass of the overall drone assembly (including airframe, components, payloads -->
+    <xacro:com_frame name="${prefix}airframe" suffix="" parent="${prefix}airframe_base_link" xyz="0.01 0 0.02" rpy="0 0 0" />
+
+    <xacro:main_pcb prefix="${prefix}" parent="${prefix}airframe_base_link" xyz="0 0 0.03" rpy="0 0 0" />
+    <xacro:sensor_pcb prefix="${prefix}sensor_" parent="${prefix}main_pcb_link" xyz="0 0 0.01" rpy="0 0 0" />
+    <xacro:fsb_pcb prefix="${prefix}fsb_" parent="${prefix}main_pcb_link" xyz="0.08 0 0.01" rpy="0 0 0" />
+    <xacro:bsb_pcb prefix="${prefix}bsb_" parent="${prefix}main_pcb_link" xyz="-0.08 0 0.01" rpy="0 0 0" />
+    <xacro:gnss_pcb prefix="${prefix}gnss_" parent="${prefix}main_pcb_link" xyz="-0.05 0 -0.05" rpy="0 0 0" />
+        
+    <link name="${prefix}top_payload_mnt_link">
+      <visual>
+        <geometry>
+          <box size="0.02 0.02 0.005" />
+        </geometry>
+        <material name="metal_gray" />
+      </visual>
+    </link>
+    <joint name="${prefix}j_top_payload_mnt" type="fixed">
+      <parent link="${prefix}airframe_base_link" />
+      <child link="${prefix}top_payload_mnt_link" />
+      <origin xyz="0 0 -0.05" rpy="0 0 0" />
+    </joint>
+
+    <link name="${prefix}bottom_payload_mnt_link" />
+    <joint name="${prefix}j_bottom_payload_mnt" type="fixed">
+      <parent link="${prefix}airframe_base_link" />
+      <child link="${prefix}bottom_payload_mnt_link" />
+      <origin xyz="0.12 0 0.03" rpy="0 0 0" />
+    </joint>
+
+    <link name="${prefix}top_payload_mnt_frame_parent" />
+    <joint name="${prefix}j_top_payload_mnt_frame_parent" type="fixed">
+      <parent link="${prefix}top_payload_mnt_link" />
+      <child link="${prefix}top_payload_mnt_frame_parent" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+    <link name="${prefix}bottom_payload_mnt_frame_parent" />
+    <joint name="${prefix}j_bottom_payload_mnt_frame_parent" type="fixed">
+      <parent link="${prefix}bottom_payload_mnt_link" />
+      <child link="${prefix}bottom_payload_mnt_frame_parent" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+  </xacro:macro>
+</robot>

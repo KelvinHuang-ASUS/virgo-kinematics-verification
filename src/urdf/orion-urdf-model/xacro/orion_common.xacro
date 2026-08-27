@@ -1,0 +1,345 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" xmlns:crs="http://araic.asus.com/xmlns/crs" name="orion_common">
+  <xacro:macro name="materials">    
+    <material name="carbon_fiber">
+      <color rgba="0.2 0.2 0.2 1" />
+    </material>
+    <material name="pcb_green">
+      <color rgba="0.1 0.5 0.1 1" />
+    </material>
+    <material name="plastic_black">
+      <color rgba="0.1 0.1 0.1 1" />
+    </material>
+    <material name="plastic_gray">
+      <color rgba="0.4 0.4 0.4 1" />
+    </material>
+    <material name="lens_blue">
+      <color rgba="0.2 0.4 0.8 1" />
+    </material>
+    <material name="prop_red">
+      <color rgba="0.8 0.1 0.1 0.7" />
+    </material>
+    <material name="prop_black">
+      <color rgba="0.1 0.1 0.1 0.7" />
+    </material>
+    <material name="metal_gray">
+      <color rgba="0.6 0.6 0.6 1" />
+    </material>
+    <material name="sensor_gold">
+      <color rgba="0.8 0.7 0.2 1" />
+    </material>
+    <material name="debug">
+      <color rgba="1.0 0.0 1.0 1" />
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="com_frame" params="name suffix:='' parent xyz:='0 0 0' rpy:='0 0 0'">
+      <link name="${name}${suffix}_com_frame">
+      <crs:description>
+        <crs:name>Center of Mass (CoM) Frame</crs:name>
+        <crs:purpose>
+          The point where the total mass of the drone can be considered to be concentrated. Be aware that the origin of the CoM Frame will vary as various payloads (e.g. gimbal, night vision etc.) are added and/or removed.
+        </crs:purpose>
+        <crs:authority>Pegasus ME</crs:authority>
+        <crs:origin>    
+          The CoM can only be computed once all components are attached to the drone. Hence, the airframe alone is not sufficient to compute the CoM. Therefore, the CoM needs to be defined as a separate "component" in the overall drone assembly.
+          The CoM could also be computed by a custom tool that reads the URDF and computes the CoM based on the mass and position of all components and then inserts this CoM frame accordingly.
+        </crs:origin>
+        <crs:orientation>
+          The same as the base_link CRS, following the FRD convention.
+        </crs:orientation>
+      </crs:description>
+      <visual>
+        <geometry>
+          <sphere radius="0.015" />
+        </geometry>
+        <material name="lens_blue" />
+      </visual>
+    </link>
+    <joint name="${name}${suffix}_com_j" type="fixed">
+      <parent link="${parent}" />
+      <child link="${name}${suffix}_com_frame" />
+      <origin xyz="${xyz}" rpy="${rpy}" />
+      <!-- 
+      <parent link="${name}${suffix}base_link" />
+      <origin xyz="0.01 0 0.02" rpy="0 0 0" />
+      -->
+    </joint>
+
+    <link name="${name}${suffix}_px_drone_body_frame">
+      <crs:description>
+        <crs:name>PX4 Drone Body Frame</crs:name>
+        <crs:purpose>
+          The PX4 Drone Body Frame is a reference frame used in the PX4 flight control software and must be located at the CoM and follow FRD convention.
+        </crs:purpose>
+        <crs:authority>Pegasus ME</crs:authority>
+        <crs:origin>
+          The px_drone_body_frame is an alias for the com_frame.
+        </crs:origin>
+        <crs:orientation>
+          Front-Right-Down.
+        </crs:orientation>
+      </crs:description>
+    </link>
+    <joint name="${name}${suffix}_px_drone_body_j" type="fixed">
+      <parent link="${name}${suffix}_com_frame" />
+      <child link="${name}${suffix}_px_drone_body_frame" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="pcb_link" params="name suffix:='' parent size:='0.04 0.04 0.002' xyz:='0 0 0' rpy:='0 0 0'">
+    <link name="${name}${suffix}_pcb_link">
+      <crs:description>
+        <crs:name>PCB Links</crs:name>
+        <crs:purpose>
+          Printed Circuit Board-fixed CRS that makes it easy to reason about sensor components and their sensor frame CRS on a single board. As part of the silkscreen, each manufactured PCB should have an arrow printed indicating the “Forward” (X) direction.
+        </crs:purpose>
+        <crs:authority>Pegasus EE</crs:authority>
+        <crs:origin>
+          Arbitrary, but typically the geometric center of the PCB. Assuming the PCB has a planar structure with corners P1...PN, then the geometric center C = ( P1 + ... + PN ) / N
+        </crs:origin>
+        <crs:orientation>
+          Forward (X), Right (Y), Down (Z)
+          X: Forward:
+            Aligned with the “Forward” arrow printed on the PCB
+          Y: Right:
+            Pointing to the right of the “Forward” arrow printed on the PCB.
+          Z: Down:
+            Perpendicular to the flat surface of the PCB, pointing down.
+        </crs:orientation>
+      </crs:description>
+      <visual>
+        <geometry>
+          <box size="${size}" />
+        </geometry>
+        <material name="pcb_green" />
+      </visual>
+    </link>
+    <joint name="${name}${suffix}_pcb_j" type="fixed">
+      <parent link="${parent}" />
+      <child link="${name}${suffix}_pcb_link" />
+      <origin xyz="${xyz}" rpy="${rpy}" />
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="sensor_frame" params="name suffix:='' parent xyz_hw:='0 0 0' rpy_hw:='0 0 0' xyz_nav:='0 0 0' rpy_nav:='0 0 0' material:='sensor_gold'">
+    <link name="${name}${suffix}_hw_frame">
+      <crs:description>
+        <crs:name>Hardware Internal Sensor Frames</crs:name>
+        <crs:purpose>
+          Hardware-aligned internal sensor frame for a sensor as mounted on a PCB. This frame is typically determined entirely by hardware, i.e. by the manufacturer's spec sheet and the placement of the sensor package on the PCB. This PCB acts as the parent link of this sensor frame.
+        </crs:purpose>
+        <crs:authority>Pegasus EE</crs:authority>
+        <crs:origin>
+          Most often, the geometric center of the sensor package (e.g. the IMU).
+        </crs:origin>
+        <crs:orientation>
+          Aligned with the sensor's internal axes as specified in the sensor's datasheet and how it is mounted on the PCB.
+        </crs:orientation>
+      </crs:description>
+      <visual>
+        <geometry>
+          <box size="0.005 0.005 0.002" />
+        </geometry>
+        <material name="${material}" />
+      </visual>
+    </link>
+    <joint name="${name}${suffix}_hw_j" type="fixed">
+      <parent link="${parent}" />
+      <child link="${name}${suffix}_hw_frame" />
+      <origin xyz="${xyz_hw}" rpy="${rpy_hw}" />
+    </joint>
+    <link name="${name}${suffix}_nav_frame">
+      <crs:description>
+        <crs:name>Navigation Sensor Frames</crs:name>
+        <crs:purpose>
+          Navigation-aligned sensor frame for a sensor as mounted on a PCB. This frame is typically imposed by the navigation software and its desired orientation convention for the sensor's output data. Typically, the software driver is responsible of transforming the sensor data from the hardware-aligned internal sensor frame to the navigation-aligned sensor frame. This frame therefore acts as the child link of the hardware-aligned internal sensor frame.
+          As we are using PX4, these frames must be defined according to the sensor frame definitions in the PX4 source code, which may differ from the hardware internal sensor frames. The driver is responsible to ensure that the correct transformations are applied to convert between the hardware internal sensor frames and the software driver sensor frames.
+        </crs:purpose>
+        <crs:authority>Pegasus BSP</crs:authority>
+        <crs:origin>
+          Typically the same as the hardware internal sensor frames, but can be different if the navigation software demands a different reference point for the sensor.
+        </crs:origin>
+        <crs:orientation>
+          Typically aligned with the hardware internal sensor frame, but axes may be swapped or inverted depending on the navigation software's conventions.
+        </crs:orientation>
+      </crs:description>
+    </link>
+    
+    <joint name="${name}${suffix}_nav_j" type="fixed">
+      <parent link="${name}${suffix}_hw_frame" />
+      <child link="${name}${suffix}_nav_frame" />
+      <origin xyz="${xyz_nav}" rpy="${rpy_nav}" />
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="imu_frame" params="name suffix:='' parent xyz_hw:='0 0 0' rpy_hw:='0 0 0' xyz_nav:='0 0 0' rpy_nav:='0 0 0' ">
+    <xacro:sensor_frame name="${name}imu" suffix="${suffix}" parent="${parent}" xyz_hw="${xyz_hw}" rpy_hw="${rpy_hw}" xyz_nav="${xyz_nav}" rpy_nav="${rpy_nav}" material="sensor_gold" />
+  </xacro:macro>
+
+  <xacro:macro name="mag_frame" params="name suffix:='' parent xyz_hw:='0 0 0' rpy_hw:='0 0 0' xyz_nav:='0 0 0' rpy_nav:='0 0 0' ">
+    <xacro:sensor_frame name="${name}mag" suffix="${suffix}" parent="${parent}" xyz_hw="${xyz_hw}" rpy_hw="${rpy_hw}" xyz_nav="${xyz_nav}" rpy_nav="${rpy_nav}" material="plastic_black" />
+  </xacro:macro>
+
+  <xacro:macro name="gnss_frame" params="name suffix:='' parent xyz_hw:='0 0 0' rpy_hw:='0 0 0' xyz_nav:='0 0 0' rpy_nav:='0 0 0' ">
+    <crs:description>
+      <crs:name>GNSS Receiver Frame</crs:name>
+      <crs:purpose>
+        Global Navigation Satellite System (e.g. GPS) frame.
+      </crs:purpose>
+      <crs:authority>Pegasus EE</crs:authority>
+      <crs:origin>
+        GNSS receiver antenna phase center (usually the geometric center of the top face of the ceramic GNSS receiver package).
+      </crs:origin>
+      <crs:orientation>
+        TBD, likely same as PX4 Body Frame.
+      </crs:orientation>
+    </crs:description>
+    <xacro:sensor_frame name="${name}gnss" suffix="${suffix}" parent="${parent}" xyz_hw="${xyz_hw}" rpy_hw="${rpy_hw}" xyz_nav="${xyz_nav}" rpy_nav="${rpy_nav}" material="plastic_gray" />
+  </xacro:macro>
+
+  <xacro:macro name="lrf_frame" params="name suffix:='' parent xyz_hw:='0 0 0' rpy_hw:='0 0 0' xyz_nav:='0 0 0' rpy_nav:='0 0 0' ">
+    <crs:description>
+      <crs:name>Laser Range Finder Frame</crs:name>
+      <crs:purpose>
+        LRF-aligned sensor frame for a sensor as mounted on a PCB.
+      </crs:purpose>
+      <crs:authority>Pegasus EE</crs:authority>
+      <crs:origin>
+        The geometrical center of the dividing line between the emitter and the receiver.
+      </crs:origin>
+      <crs:orientation>
+        X:
+          Pointing out of the sensor array in the direction of the laser beam.
+        Z:
+          Perpendicular to X, pointing down along the emitter / receiver dividing line.
+        Y:
+          Defined by the right-hand rule as Y = Z x X (equivalently X x Y = Z).
+        In an observer-facing view (beam pointing toward the observer), Y points to the left, i.e. toward the emitter when the emitter is left of the receiver.
+
+                        +Z (down along divider)
+                        ^
+                        |
+                        |
+         -Y ----[ R ]---O---[ E ]--- +Y
+                     (origin)
+                        +X : looking into the sensor, i.e. O points toward you
+      </crs:orientation>
+    </crs:description>
+    <xacro:sensor_frame name="${name}lrf" suffix="${suffix}" parent="${parent}" xyz_hw="${xyz_hw}" rpy_hw="${rpy_hw}" xyz_nav="${xyz_nav}" rpy_nav="${rpy_nav}" material="plastic_black" />
+  </xacro:macro>
+
+  <xacro:macro name="camera_with_cv" params="name parent xyz:='0 0 0' rpy:='0 0 0' radius:='0.005' length:='0.01' material:='lens_blue'">
+    <link name="${name}_link">
+      <crs:description>
+        <crs:name>Camera Link</crs:name>
+        <crs:purpose>
+          Camera link where x axis is aligned with the camera's forward direction, i.e. optical axis. This is necessary for compliance with widely used robotics conventions and CAD software.
+        </crs:purpose>
+        <crs:authority>Pegasus DIT</crs:authority>
+        <crs:origin>
+          The geometric center of the physical image sensor grid (focal plane).
+          TBD: Alternatively, the center of the aperture could be used or the "virtual" pinhole of the camera-lens system.
+        </crs:origin>
+        <crs:orientation>
+          X: Forward:
+            The optical axis, pointing straight out of the lens, perpendicular to the image sensor plane.
+          Z: Down:
+            In-sensor-plane axis aligned with increasing row index (top-to-bottom in the image). For rolling shutter, this is the same direction as the line-sweep/readout progression. For global shutter, use the line readout order (first read row to later read rows) to define the +Z direction.
+          Y: Right:
+            In-sensor-plane axis aligned with increasing column index within a row.
+        </crs:orientation>
+      </crs:description>
+      <visual>
+        <origin xyz="0.005 0 0" rpy="0 1.5708 0" />
+        <geometry>
+          <cylinder radius="${radius}" length="${length}" />
+        </geometry>
+        <material name="${material}" />
+      </visual>
+    </link>
+    <joint name="${name}_j" type="fixed">
+      <parent link="${parent}" />
+      <child link="${name}_link" />
+      <origin xyz="${xyz}" rpy="${rpy}" />
+    </joint>
+
+    <link name="${name}_cv_frame">
+      <crs:description>
+        <crs:name>Camera Computer Vision Frame</crs:name>
+        <crs:purpose>
+          Camera computer vision frame compliant with computer vision conventions where Z axis is parallel to the optical axis and designates the image depth. Note that depending on the ISP configuration, the lines in the image sensor's pixel array (the cam_n_link Y direction) might map to either the CV image's row or column (usually row, though).
+        </crs:purpose>
+        <crs:authority>Pegasus DIT</crs:authority>
+        <crs:origin>
+          TBD:
+            - Center of the aperture
+            - "virtual" pinhole of the camera-lens system.
+            - Principal Point, i.e. the point where the optical axis intersects the image sensor plane.
+        </crs:origin>
+        <crs:orientation>
+          Z: Depth:
+            The optical axis, pointing straight out of the lens, exactly perpendicular to the flat surface of the image sensor. Coinciding with the X direction of the corresponding Camera Link CRS.
+          X: Right:
+            The axis parallel to the image rows, pointing toward the right side when looking at the image on a display.
+          Y: Down:
+            The axis parallel to the image columns of the pixel array, pointing down when looking at the image on a display.
+        </crs:orientation>
+      </crs:description>
+    </link>
+    <joint name="${name}_cv_j" type="fixed">
+      <parent link="${name}_link" />
+      <child link="${name}_cv_frame" />
+      <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708" />
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="rotor" params="name suffix:='' parent xyz rpy axis='0.0 0.0 1.0'">
+    <link name="${name}rotor${suffix}_link">
+      <crs:description>
+        <crs:name>Rotor</crs:name>
+        <crs:purpose>
+          For quadrotors the following enumeration should be followed:
+            1 - front-right
+            2 - back-left
+            3 - front-left
+            4 - back-right
+        </crs:purpose>
+        <crs:authority>Pegasus ME</crs:authority>
+        <crs:origin>
+          The intersection of the rotor's axis of rotation and the propeller's mounting plane.
+        </crs:origin>
+        <crs:orientation>
+          Z: Down:
+            Coaxial with the rotor's axis of rotation, pointing from the propeller mounting plane “down” through the stator's mounting base.
+          X: Forward:
+            Orthogonal to Z, pointing radially outward from the center, perfectly bisecting the stator phase wire exit bundle (the place where the 3 cables leave the motor). This is the only non-symmetrical part on a motor and is therefore used to define a unique reference frame.
+          Y: Right:
+            Orthogonal to X and Z, derived via the right-hand rule to form a right-handed reference frame.
+        </crs:orientation>
+      </crs:description>
+      <visual>
+        <origin xyz="0 0 -0.01" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="0.02" length="0.02" />
+        </geometry>
+        <material name="metal_gray" />
+      </visual>
+      <visual>
+        <origin xyz="0 0 0.01" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="0.12" length="0.005" />
+        </geometry>
+        <material name="prop_red" />
+      </visual>
+    </link>
+    <joint name="${name}rotor${suffix}_j" type="continuous">
+      <parent link="${parent}" />
+      <child link="${name}rotor${suffix}_link" />
+      <origin xyz="${xyz}" rpy="${rpy}" />
+      <axis xyz="${axis}" />
+    </joint>
+  </xacro:macro>
+
+</robot>

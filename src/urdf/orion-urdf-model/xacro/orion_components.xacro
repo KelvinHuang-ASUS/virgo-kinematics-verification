@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" xmlns:crs="http://araic.asus.com/xmlns/crs" name="orion_components">
+  <xacro:include filename="orion_common.xacro" />
+
+  <!--
+    Name: Main Board Link
+    Description: Includes the flight controller and the companion computer.
+  -->
+  <xacro:macro name="main_pcb" params="prefix:='' parent xyz:='0 0 0' rpy:='0 0 0'">
+    <xacro:pcb_link name="${prefix}main" parent="${parent}" xyz="${xyz}" rpy="${rpy}" size="0.08 0.08 0.002" />
+  </xacro:macro>
+
+  <xacro:macro name="sensor_pcb" params="prefix:='' parent xyz:='0 0 0' rpy:='0 0 0'">
+    <xacro:pcb_link name="${prefix}sensor" parent="${parent}" xyz="${xyz}" rpy="${rpy}" size="0.04 0.04 0.002" />
+    <xacro:property name="pcb_link_name" value="${prefix}sensor_pcb_link" />
+    <xacro:imu_frame name="${prefix}" suffix="_0" parent="${pcb_link_name}" xyz_hw="0.01 0.01 0.002" rpy_hw="0 0 0" xyz_nav="0 0 0" rpy_nav="0 0 0"/>
+    <xacro:imu_frame name="${prefix}" suffix="_1" parent="${pcb_link_name}" xyz_hw="0.01 -0.01 0.002" rpy_hw="0 0 0" xyz_nav="0 0 0" rpy_nav="0 0 0" />
+    <xacro:imu_frame name="${prefix}" suffix="_2" parent="${pcb_link_name}" xyz_hw="-0.01 0.01 0.002" rpy_hw="0 0 0" xyz_nav="0 0 0" rpy_nav="0 0 0" />
+    <xacro:mag_frame name="${prefix}" suffix="_3" parent="${pcb_link_name}" xyz_hw="-0.01 -0.01 0.002" rpy_hw="0 0 0" xyz_nav="0 0 0" rpy_nav="0 0 0" />
+  </xacro:macro>
+
+  <!--
+    Name: Front Sub-Board Link.
+  -->
+  <xacro:macro name="fsb_pcb" params="prefix:='' parent xyz:='0 0 0' rpy:='0 0 0'">
+    <xacro:pcb_link name="${prefix}fsb" parent="${parent}" xyz="${xyz}" rpy="${rpy}" size="0.03 0.08 0.002" />
+    <xacro:property name="pcb_link_name" value="${prefix}fsb_pcb_link" />
+    <xacro:imu_frame name="${prefix}" suffix="_3" parent="${pcb_link_name}" xyz_hw="0.01 0 0.002" rpy_hw="0 0 0" xyz_nav="0 0 0" rpy_nav="0 0 0" />
+    <xacro:mag_frame name="${prefix}" suffix="_1" parent="${pcb_link_name}" xyz_hw="0.01 0.02 0.002" rpy_hw="0 0 0" xyz_nav="0 0 0" rpy_nav="0 0 0" />
+    <xacro:mag_frame name="${prefix}" suffix="_2" parent="${pcb_link_name}" xyz_hw="0.01 -0.02 0.002" rpy_hw="0 0 0" xyz_nav="0 0 0" rpy_nav="0 0 0" />
+    <xacro:lrf_frame name="${prefix}" suffix="_0" parent="${pcb_link_name}" xyz_hw="0 0 -0.01" rpy_hw="0 1.5708 0" xyz_nav="0 0 0" rpy_nav="0 0 0" />
+    <xacro:camera_with_cv name="${prefix}cam_0" parent="${pcb_link_name}" xyz="0.015 0.03 0" />
+    <xacro:camera_with_cv name="${prefix}cam_1" parent="${pcb_link_name}" xyz="0.015 0 0" />
+    <xacro:camera_with_cv name="${prefix}cam_2" parent="${pcb_link_name}" xyz="0.015 -0.03 0" />
+  </xacro:macro>
+
+  <!--
+    Name: Back Sub-Board Link.
+  -->
+  <xacro:macro name="bsb_pcb" params="prefix:='' parent xyz:='0 0 0' rpy:='0 0 0'">
+    <xacro:pcb_link name="${prefix}bsb" parent="${parent}" xyz="${xyz}" rpy="${rpy}" size="0.03 0.08 0.002" />
+    <xacro:property name="pcb_link_name" value="${prefix}bsb_pcb_link" />
+    <xacro:imu_frame name="${prefix}" suffix="_4" parent="${pcb_link_name}" xyz_hw="-0.01 0 0.002" rpy_hw="0 0 0" xyz_nav="0 0 0" rpy_nav="0 0 0" />
+    <xacro:mag_frame name="${prefix}" suffix="_0" parent="${pcb_link_name}" xyz_hw="-0.01 0.02 0.002" rpy_hw="0 0 0" xyz_nav="0 0 0" rpy_nav="0 0 0" />
+    <xacro:camera_with_cv name="${prefix}cam_3" parent="${pcb_link_name}" xyz="-0.015 0.03 0" rpy="0 0 3.1415" />
+    <xacro:camera_with_cv name="${prefix}cam_4" parent="${pcb_link_name}" xyz="-0.015 0 0" rpy="0 0 3.1415" />
+    <xacro:camera_with_cv name="${prefix}cam_5" parent="${pcb_link_name}" xyz="-0.015 -0.03 0" rpy="0 0 3.1415" />
+  </xacro:macro>
+
+  <xacro:macro name="gnss_pcb" params="prefix:='' parent xyz:='0 0 0' rpy:='0 0 0'">
+    <xacro:pcb_link name="${prefix}gnss" parent="${parent}" xyz="-0.05 0 -0.05" rpy="0 0 0" size="0.05 0.05 0.008" />
+    <xacro:property name="pcb_link_name" value="${prefix}gnss_pcb_link" />
+    <xacro:gnss_frame name="${prefix}" suffix="_0" parent="${pcb_link_name}" xyz_hw="0 0 0.004" rpy_hw="0 0 0" xyz_nav="0 0 0" rpy_nav="0 0 0" />
+  </xacro:macro>
+
+  <xacro:macro name="airframe" params="prefix:=''">
+    <link name="${prefix}base_link">
+      <!-- Semantic metadata ignored by URDF parser, read by custom tools -->
+      <crs:description>
+        <crs:name>Base Link</crs:name>
+        <crs:purpose>
+          The primary physical reference frame of the drone. Often, the CoG is an alias for the base_link, but it can be defined separately if the CoG does not coincide with the base_link origin.
+        </crs:purpose>
+        <crs:authority>Pegasus ME</crs:authority>
+        <crs:origin>
+          Arbitrary, but typically located at the geometric center of the drone's main body or at the intersection of the arms connecting the rotors.
+        </crs:origin>
+        <crs:orientation>
+          Following FRD convention, the X-axis points Forward (towards the front of the drone), the Y-axis points to the Right (starboard side), and the Z-axis points Downwards (towards the ground).
+        </crs:orientation>
+      </crs:description>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.2 0.15 0.06" />
+        </geometry>
+        <material name="carbon_fiber" />
+      </visual>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0.7854" />
+        <geometry>
+          <box size="0.6 0.02 0.01" />
+        </geometry>
+        <material name="carbon_fiber" />
+      </visual>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 -0.7854" />
+        <geometry>
+          <box size="0.6 0.02 0.01" />
+        </geometry>
+        <material name="carbon_fiber" />
+      </visual>
+    </link>
+
+    <link name="${prefix}cog_frame">
+      <crs:description>
+        <crs:name>Center of Geometry (CoG) Frame</crs:name>
+        <crs:purpose>
+          The Center of Geometry is mostly used for mechanical engineering and is likely not used in software.
+        </crs:purpose>
+        <crs:authority>Pegasus ME</crs:authority>
+        <crs:origin>
+            The geometric centroid C of rotor mounting points. Let P1 (front-right), P2 (back-left), P3 (front-left) and P4 (back-right) be the centers of the mounting points of the 4 drone rotors, expressed in the base_link CRS. Compute the centroid coordinates C = ( P1 + P2 + P3 + P4 ) / 4.
+        </crs:origin>
+        <crs:orientation>
+          Compute a best-fit least squares plane through the four points P1, P2, P3 and P4.
+          Z: Down:
+            The normal vector n of the plane, pointing downwards (towards the ground).
+          X: Forward: 
+            - Compute the midpoint between the front two rotors as M13 = ( P1 + P3 ) / 2
+            - Compute the midpoint between the rear two rotors as M24 = ( P2 + P4 ) / 2
+            - Compute a forward pointing vector V = M13 - M24
+            - Project the forward pointing vector V onto the best-fit plane X = (I - n * n^T) * V, where I is the identity matrix and n is the unit-length normal vector of the plane. Normalize the resulting vector to get the X-axis unit vector.
+          Y: Right:
+            The Y-axis unit vector can be computed as the cross product of the Z and X unit vectors: Y = Z x X.
+          Note: For drones with a different number of rotors than 4, the same definition can be extended but the mounting points of all rotors have to be clearly defined.
+        </crs:orientation>
+      </crs:description>
+    </link>
+    <joint name="${prefix}cog_j" type="fixed">
+      <parent link="${prefix}base_link" />
+      <child link="${prefix}cog_frame" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+    <xacro:rotor name="${prefix}" suffix="_1" parent="${prefix}base_link" xyz="0.21 0.21 0" rpy="0 0 0" />
+    <xacro:rotor name="${prefix}" suffix="_2" parent="${prefix}base_link" xyz="-0.21 -0.21 0" rpy="0 0 0" />
+    <xacro:rotor name="${prefix}" suffix="_3" parent="${prefix}base_link" xyz="0.21 -0.21 0" rpy="0 0 0" />
+    <xacro:rotor name="${prefix}" suffix="_4" parent="${prefix}base_link" xyz="-0.21 0.21 0" rpy="0 0 0" />
+  </xacro:macro>
+</robot>

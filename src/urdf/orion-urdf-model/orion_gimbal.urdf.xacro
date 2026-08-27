@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="orion_gimbal_payload">
+  <xacro:include filename="xacro/orion_gimbal.xacro" />
+  <xacro:materials />
+  <xacro:orion_gimbal />
+</robot>

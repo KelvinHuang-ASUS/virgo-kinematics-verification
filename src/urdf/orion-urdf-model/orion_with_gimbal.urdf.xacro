@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="orion_uav_with_gimbal">
+  <xacro:arg name="drone_prefix" default="" />
+  <xacro:arg name="gimbal_prefix" default="" />
+  <xacro:arg name="drone_mount_frame" default="bottom_payload_mnt_frame_parent" />
+  <xacro:arg name="gimbal_mount_frame" default="gimbal_mnt_frame_child" />
+
+  <xacro:include filename="xacro/orion_drone.xacro" />
+  <xacro:include filename="xacro/orion_gimbal.xacro" />
+
+  <xacro:materials />
+  <xacro:orion_drone prefix="$(arg drone_prefix)" />
+  <xacro:orion_gimbal prefix="$(arg gimbal_prefix)" />
+
+  <joint name="j_payload_attached" type="fixed">
+    <parent link="$(arg drone_prefix)$(arg drone_mount_frame)" />
+    <child link="$(arg gimbal_prefix)$(arg gimbal_mount_frame)" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+</robot>
