@@ -18,3 +18,7 @@ venv/
 *.gv
 *.urdf
 !src/**/urdf/*.urdf
+!output/*.urdf
+!output/*.gv
+!output/*.pdf
+
