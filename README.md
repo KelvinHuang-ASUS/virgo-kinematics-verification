@@ -1,7 +1,7 @@
-# Orion Gimbal ROS 2 Workspace
+# Virgo Kinematics Verification
 
 ## Overview
-This repository manages the kinematics, URDF/Xacro models, and TF tree verification for the Orion Gimbal project.
+This repository manages the kinematics, URDF/Xacro models, and TF tree verification pipeline.
 
 ## Prerequisites
 - Ubuntu 26.04 LTS
