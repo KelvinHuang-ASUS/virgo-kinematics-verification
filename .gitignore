@@ -21,4 +21,8 @@ venv/
 !output/*.urdf
 !output/*.gv
 !output/*.pdf
+!output/*/*.urdf
+!output/*/*.gv
+!output/*/*.pdf
+
 
