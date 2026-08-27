@@ -41,3 +41,13 @@ The entire compilation and rendering workflow is powered by the **ROS 2 native r
 1. Activate virtual environment: `source .venv/bin/activate`
 2. Install dependencies: `pip install -r requirements.txt`
 3. Execute automated pipeline: `python3 scripts/generate_topology.py src/urdf/orion-urdf-model/orion_gimbal.urdf.xacro output`
+
+---
+
+## Experimental Workspaces
+
+Dedicated sandbox environments are established under the `experiments/` directory to allow iterative tuning and testing of physical dynamics, reference frames, and visual properties without altering baseline models:
+
+- **[Gimbal Inertia Tuning Sandbox](experiments/gimbal_inertia_tuning/)**: Standalone workspace for closed-form rigid body inertia parameter calculation, COM alignment, and camera/LRF sensor frame rotation matrix validation.
+
+
