@@ -108,6 +108,10 @@ def render_joint_graph(input_path: Path, output_dir: Path):
     print(f"[+] Rendering custom joint graph PNG: {png_path}")
     subprocess.run(["dot", "-Tpng", str(gv_path), "-o", str(png_path)], check=True)
 
+    pdf_path = output_dir / f"{base_name}_joint_graph.pdf"
+    print(f"[+] Rendering custom joint graph PDF: {pdf_path}")
+    subprocess.run(["dot", "-Tpdf", str(gv_path), "-o", str(pdf_path)], check=True)
+
     print(f"[✓] Joint graph rendering complete. Outputs generated in: {output_dir}")
 
 

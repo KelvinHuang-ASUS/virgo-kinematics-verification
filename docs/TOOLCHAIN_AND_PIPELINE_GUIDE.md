@@ -6,8 +6,8 @@ This document details the toolchain, installation, verification steps, and depen
 - **xacro**: Evaluates XML macros, math parameters, and imports into a single unified URDF.
 - **liburdfdom-tools (urdf_to_graphviz)**: Parses URDF links/joints hierarchy into DOT graph format (.gv).
 - **graphviz (dot engine)**: Renders DOT descriptor into vector PDF tree and PNG diagrams.
-- **generate_topology.py**: Python orchestrator combining xacro and urdf_to_graphviz in a single command.
-- **render_joint_graph.py**: Custom Python script utilizing standard libraries to generate styled Graphviz kinematic joint structure diagrams (`*_joint_graph.gv` and `*_joint_graph.png`) with color-coded root links, standard links, fixed joints, and revolute/continuous joints.
+- **generate_topology.py**: Python orchestrator combining `xacro` and `urdf_to_graphviz` to generate compiled URDFs and full kinematic TF tree topology artifacts (`*_topology.gv`, `*_topology.pdf`, `*_topology.png`).
+- **render_joint_graph.py**: Custom Python script utilizing standard libraries to generate styled Graphviz kinematic joint structure diagrams (`*_joint_graph.gv`, `*_joint_graph.png`, `*_joint_graph.pdf`) with color-coded root links, standard links, fixed joints, and revolute/continuous joints.
 
 ## 2. Dependency Architecture & requirements.txt Design
 In this workspace, `requirements.txt` intentionally contains only `xacro>=2.0.0` due to core architectural principles:

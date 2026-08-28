@@ -28,6 +28,11 @@ def generate_topology(xacro_path: Path, output_dir: Path):
 
     print(f"[+] Generating kinematic TF tree PDF: {pdf_base}.pdf")
     subprocess.run(["urdf_to_graphviz", str(urdf_path), str(pdf_base)], check=True)
+
+    gv_path = output_dir / f"{base_name}_topology.gv"
+    png_path = output_dir / f"{base_name}_topology.png"
+    print(f"[+] Rendering kinematic TF tree PNG: {png_path}")
+    subprocess.run(["dot", "-Tpng", str(gv_path), "-o", str(png_path)], check=True)
     
     print(f"[✓] Verification pipeline complete. Outputs generated in: {output_dir}")
 

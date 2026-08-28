@@ -52,8 +52,12 @@ python3 scripts/render_joint_graph.py experiments/01_inertia_macros_setup/virgo_
 
 ### Verification Artifacts Generated
 - `output/01_inertia_macros_setup/virgo_gimbal_compiled.urdf`: Compiled XML URDF containing all expanded `<inertial>` elements.
+- `output/01_inertia_macros_setup/virgo_gimbal_topology.gv`: Graphviz DOT TF topology descriptor.
 - `output/01_inertia_macros_setup/virgo_gimbal_topology.pdf`: Vector PDF graph of the kinematic TF frame hierarchy.
+- `output/01_inertia_macros_setup/virgo_gimbal_topology.png`: Rendered PNG diagram of the kinematic TF frame hierarchy.
 - `output/01_inertia_macros_setup/virgo_gimbal_joint_graph.gv`: Custom Graphviz DOT joint structure descriptor.
 - `output/01_inertia_macros_setup/virgo_gimbal_joint_graph.png`: Rendered PNG diagram of the kinematic joint structure.
+- `output/01_inertia_macros_setup/virgo_gimbal_joint_graph.pdf`: Rendered vector PDF diagram of the kinematic joint structure.
+
 
 

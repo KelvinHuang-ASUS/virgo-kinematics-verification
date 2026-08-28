@@ -46,8 +46,12 @@ python3 scripts/render_joint_graph.py experiments/02_joint_limits_and_dynamics/v
 
 ### Verification Artifacts Generated
 - `output/02_joint_limits_and_dynamics/virgo_gimbal_compiled.urdf`: Compiled XML URDF containing expanded `<limit>` and `<dynamics>` blocks for all 3 motor joints.
+- `output/02_joint_limits_and_dynamics/virgo_gimbal_topology.gv`: Graphviz DOT TF topology descriptor.
 - `output/02_joint_limits_and_dynamics/virgo_gimbal_topology.pdf`: Vector PDF graph of the kinematic TF frame hierarchy.
+- `output/02_joint_limits_and_dynamics/virgo_gimbal_topology.png`: Rendered PNG diagram of the kinematic TF frame hierarchy.
 - `output/02_joint_limits_and_dynamics/virgo_gimbal_joint_graph.gv`: Custom Graphviz DOT joint structure descriptor.
 - `output/02_joint_limits_and_dynamics/virgo_gimbal_joint_graph.png`: Rendered PNG diagram of the kinematic joint structure.
+- `output/02_joint_limits_and_dynamics/virgo_gimbal_joint_graph.pdf`: Rendered vector PDF diagram of the kinematic joint structure.
+
 
 
