@@ -21,8 +21,11 @@ venv/
 !output/*.urdf
 !output/*.gv
 !output/*.pdf
+!output/*.png
 !output/*/*.urdf
 !output/*/*.gv
 !output/*/*.pdf
+!output/*/*.png
+
 
 
