@@ -41,6 +41,8 @@ The entire compilation and rendering workflow is powered by the **ROS 2 native r
 1. Activate virtual environment: `source .venv/bin/activate`
 2. Install dependencies: `pip install -r requirements.txt`
 3. Execute automated pipeline: `python3 scripts/generate_topology.py src/urdf/orion-urdf-model/orion_gimbal.urdf.xacro output`
+4. Render custom joint structure graph: `python3 scripts/render_joint_graph.py src/urdf/orion-urdf-model/orion_gimbal.urdf.xacro output`
+
 
 ---
 

@@ -43,13 +43,17 @@ All 8 physical links in `virgo_gimbal.xacro` (`gimbal_base_link`, `gimbal_mnt_li
 
 ## Verification Pipeline
 
-To expand Xacro templates into compiled URDF XML and render the kinematic TF tree topology:
+To expand Xacro templates into compiled URDF XML, render the kinematic TF tree topology, and generate custom joint structure diagrams:
 
 ```bash
 python3 scripts/generate_topology.py experiments/01_inertia_macros_setup/virgo_gimbal.urdf.xacro output/01_inertia_macros_setup
+python3 scripts/render_joint_graph.py experiments/01_inertia_macros_setup/virgo_gimbal.urdf.xacro output/01_inertia_macros_setup
 ```
 
 ### Verification Artifacts Generated
 - `output/01_inertia_macros_setup/virgo_gimbal_compiled.urdf`: Compiled XML URDF containing all expanded `<inertial>` elements.
 - `output/01_inertia_macros_setup/virgo_gimbal_topology.pdf`: Vector PDF graph of the kinematic TF frame hierarchy.
+- `output/01_inertia_macros_setup/virgo_gimbal_joint_graph.gv`: Custom Graphviz DOT joint structure descriptor.
+- `output/01_inertia_macros_setup/virgo_gimbal_joint_graph.png`: Rendered PNG diagram of the kinematic joint structure.
+
 

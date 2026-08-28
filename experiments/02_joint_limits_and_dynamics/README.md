@@ -37,13 +37,17 @@ experiments/02_joint_limits_and_dynamics/
 
 ## Verification Pipeline
 
-To expand Xacro templates into compiled URDF XML and render the kinematic TF tree topology:
+To expand Xacro templates into compiled URDF XML, render the kinematic TF tree topology, and generate custom joint structure diagrams:
 
 ```bash
 python3 scripts/generate_topology.py experiments/02_joint_limits_and_dynamics/virgo_gimbal.urdf.xacro output/02_joint_limits_and_dynamics
+python3 scripts/render_joint_graph.py experiments/02_joint_limits_and_dynamics/virgo_gimbal.urdf.xacro output/02_joint_limits_and_dynamics
 ```
 
 ### Verification Artifacts Generated
 - `output/02_joint_limits_and_dynamics/virgo_gimbal_compiled.urdf`: Compiled XML URDF containing expanded `<limit>` and `<dynamics>` blocks for all 3 motor joints.
 - `output/02_joint_limits_and_dynamics/virgo_gimbal_topology.pdf`: Vector PDF graph of the kinematic TF frame hierarchy.
+- `output/02_joint_limits_and_dynamics/virgo_gimbal_joint_graph.gv`: Custom Graphviz DOT joint structure descriptor.
+- `output/02_joint_limits_and_dynamics/virgo_gimbal_joint_graph.png`: Rendered PNG diagram of the kinematic joint structure.
+
 

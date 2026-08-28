@@ -1,0 +1,40 @@
+digraph G {
+  rankdir=TB;
+  node [fontname="Helvetica", fontsize=10, shape=box, style="filled,rounded"];
+  edge [fontname="Helvetica", fontsize=9];
+
+  "gimbal_base_link" [fillcolor="#F8FAFC", color="#334155", label="gimbal_base_link"];
+  "gimbal_mnt_link" [fillcolor="#F8FAFC", color="#334155", label="gimbal_mnt_link"];
+  "gimbal_mnt_frame_child" [fillcolor="#FEF3C7", color="#D97706", label="gimbal_mnt_frame_child"];
+  "gimbal_susp_link" [fillcolor="#F8FAFC", color="#334155", label="gimbal_susp_link"];
+  "gimbal_motor_3_link" [fillcolor="#F8FAFC", color="#334155", label="gimbal_motor_3_link"];
+  "gimbal_motor_2_link" [fillcolor="#F8FAFC", color="#334155", label="gimbal_motor_2_link"];
+  "gimbal_motor_1_link" [fillcolor="#F8FAFC", color="#334155", label="gimbal_motor_1_link"];
+  "gimbal_amba_bd_link" [fillcolor="#F8FAFC", color="#334155", label="gimbal_amba_bd_link"];
+  "cam_wide_link" [fillcolor="#F8FAFC", color="#334155", label="cam_wide_link"];
+  "cam_wide_cv_frame" [fillcolor="#F8FAFC", color="#334155", label="cam_wide_cv_frame"];
+  "cam_narrow_link" [fillcolor="#F8FAFC", color="#334155", label="cam_narrow_link"];
+  "cam_narrow_cv_frame" [fillcolor="#F8FAFC", color="#334155", label="cam_narrow_cv_frame"];
+  "cam_tele_link" [fillcolor="#F8FAFC", color="#334155", label="cam_tele_link"];
+  "cam_tele_cv_frame" [fillcolor="#F8FAFC", color="#334155", label="cam_tele_cv_frame"];
+  "cam_thermal_link" [fillcolor="#F8FAFC", color="#334155", label="cam_thermal_link"];
+  "cam_thermal_cv_frame" [fillcolor="#F8FAFC", color="#334155", label="cam_thermal_cv_frame"];
+  "lrf_gimbal_frame" [fillcolor="#F8FAFC", color="#334155", label="lrf_gimbal_frame"];
+
+  "gimbal_mnt_link" -> "gimbal_base_link" [label="j_gimbal_mnt\n[fixed]", style="dashed", color="#475569"];
+  "gimbal_mnt_frame_child" -> "gimbal_mnt_link" [label="j_gimbal_mnt_frame_child\n[fixed]", style="dashed", color="#475569"];
+  "gimbal_base_link" -> "gimbal_susp_link" [label="j_gimbal_susp\n[fixed]", style="dashed", color="#475569"];
+  "gimbal_susp_link" -> "gimbal_motor_3_link" [label="j_gimbal_motor_3\n[revolute]", color="#0284C7", style="bold"];
+  "gimbal_motor_3_link" -> "gimbal_motor_2_link" [label="j_gimbal_motor_2\n[revolute]", color="#0284C7", style="bold"];
+  "gimbal_motor_2_link" -> "gimbal_motor_1_link" [label="j_gimbal_motor_1\n[revolute]", color="#0284C7", style="bold"];
+  "gimbal_mnt_link" -> "gimbal_amba_bd_link" [label="j_gimbal_amba_bd\n[fixed]", style="dashed", color="#475569"];
+  "gimbal_amba_bd_link" -> "cam_wide_link" [label="cam_wide_j\n[fixed]", style="dashed", color="#475569"];
+  "cam_wide_link" -> "cam_wide_cv_frame" [label="cam_wide_cv_j\n[fixed]", style="dashed", color="#475569"];
+  "gimbal_amba_bd_link" -> "cam_narrow_link" [label="cam_narrow_j\n[fixed]", style="dashed", color="#475569"];
+  "cam_narrow_link" -> "cam_narrow_cv_frame" [label="cam_narrow_cv_j\n[fixed]", style="dashed", color="#475569"];
+  "gimbal_amba_bd_link" -> "cam_tele_link" [label="cam_tele_j\n[fixed]", style="dashed", color="#475569"];
+  "cam_tele_link" -> "cam_tele_cv_frame" [label="cam_tele_cv_j\n[fixed]", style="dashed", color="#475569"];
+  "gimbal_amba_bd_link" -> "cam_thermal_link" [label="cam_thermal_j\n[fixed]", style="dashed", color="#475569"];
+  "cam_thermal_link" -> "cam_thermal_cv_frame" [label="cam_thermal_cv_j\n[fixed]", style="dashed", color="#475569"];
+  "gimbal_amba_bd_link" -> "lrf_gimbal_frame" [label="j_lrf_gimbal\n[fixed]", style="dashed", color="#475569"];
+}
