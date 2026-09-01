@@ -1,3 +1,8 @@
+## 3D CAD STEP files (stored locally, exceeds GitHub 100MB limit)
+*.STEP
+*.step
+*.stp
+
 # ROS 2 build artifacts
 build/
 install/

@@ -1,0 +1,26 @@
+digraph G {
+  rankdir=TB;
+  node [fontname="Helvetica", fontsize=10, shape=box, style="filled,rounded"];
+  edge [fontname="Helvetica", fontsize=9];
+
+  "isp_box_link" [fillcolor="#FEF3C7", color="#D97706", label="isp_box_link"];
+  "suspend_link" [fillcolor="#F8FAFC", color="#334155", label="suspend_link"];
+  "roll_link" [fillcolor="#F8FAFC", color="#334155", label="roll_link"];
+  "yaw_link" [fillcolor="#F8FAFC", color="#334155", label="yaw_link"];
+  "pitch_link" [fillcolor="#F8FAFC", color="#334155", label="pitch_link"];
+  "payload_link" [fillcolor="#F8FAFC", color="#334155", label="payload_link"];
+  "imu_link" [fillcolor="#F8FAFC", color="#334155", label="imu_link"];
+  "narrow_cam_link" [fillcolor="#F8FAFC", color="#334155", label="narrow_cam_link"];
+  "tele_cam_link" [fillcolor="#F8FAFC", color="#334155", label="tele_cam_link"];
+  "wide_cam_link" [fillcolor="#F8FAFC", color="#334155", label="wide_cam_link"];
+
+  "isp_box_link" -> "suspend_link" [label="isp_box_to_suspend\n[fixed]", style="dashed", color="#475569"];
+  "suspend_link" -> "roll_link" [label="suspend_to_roll\n[revolute]", color="#0284C7", style="bold"];
+  "roll_link" -> "yaw_link" [label="roll_to_yaw\n[revolute]", color="#0284C7", style="bold"];
+  "yaw_link" -> "pitch_link" [label="yaw_to_pitch\n[revolute]", color="#0284C7", style="bold"];
+  "pitch_link" -> "payload_link" [label="pitch_to_payload\n[fixed]", style="dashed", color="#475569"];
+  "payload_link" -> "imu_link" [label="payload_to_imu\n[fixed]", style="dashed", color="#475569"];
+  "payload_link" -> "narrow_cam_link" [label="payload_to_narrow\n[fixed]", style="dashed", color="#475569"];
+  "payload_link" -> "tele_cam_link" [label="payload_to_tele\n[fixed]", style="dashed", color="#475569"];
+  "payload_link" -> "wide_cam_link" [label="payload_to_wide\n[fixed]", style="dashed", color="#475569"];
+}

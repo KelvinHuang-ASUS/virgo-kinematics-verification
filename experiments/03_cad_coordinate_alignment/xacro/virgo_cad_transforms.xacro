@@ -4,48 +4,48 @@
     ===========================================================================
     Vendor CAD Transformation Specifications (ER_260820 Baseline)
     ===========================================================================
-    This file contains pre-reserved transformation properties derived from
-    vendor CAD Datum Coordinate Systems (CAD_Model_ER_260820).
+    This file contains exact transformation properties derived from vendor CAD
+    Datum Coordinate Systems (CAD_Model_ER_260820).
     
     Units:
       - Translational (xyz): Meters [m] (converted from millimeters)
-      - Rotational (rpy): Radians [rad] (converted from degrees)
+      - Rotational (rpy): Radians [rad] (converted from Euler angles / matrix)
   -->
 
   <!-- 1. ISP Box -> Suspend Transform -->
-  <xacro:property name="isp_box_to_suspend_xyz" value="0.0 0.0 0.0" />
+  <xacro:property name="isp_box_to_suspend_xyz" value="0.064306 -0.000001 0.021546" />
   <xacro:property name="isp_box_to_suspend_rpy" value="0.0 0.0 0.0" />
 
   <!-- 2. Suspend -> Roll Transform -->
-  <xacro:property name="suspend_to_roll_xyz" value="0.0 0.0 0.0" />
-  <xacro:property name="suspend_to_roll_rpy" value="0.0 0.0 0.0" />
+  <xacro:property name="suspend_to_roll_xyz" value="-0.070790 0.0 0.029217" />
+  <xacro:property name="suspend_to_roll_rpy" value="0.0 1.178098 0.0" />
 
   <!-- 3. Roll -> Yaw Transform -->
-  <xacro:property name="roll_to_yaw_xyz" value="0.0 0.0 0.0" />
-  <xacro:property name="roll_to_yaw_rpy" value="0.0 0.0 0.0" />
+  <xacro:property name="roll_to_yaw_xyz" value="-0.039807 0.0 0.034129" />
+  <xacro:property name="roll_to_yaw_rpy" value="0.0 0.750491 0.0" />
 
   <!-- 4. Yaw -> Pitch Transform -->
-  <xacro:property name="yaw_to_pitch_xyz" value="0.0 0.0 0.0" />
-  <xacro:property name="yaw_to_pitch_rpy" value="0.0 0.0 0.0" />
+  <xacro:property name="yaw_to_pitch_xyz" value="0.0 0.054600 0.078100" />
+  <xacro:property name="yaw_to_pitch_rpy" value="1.570796 1.570796 0.0" />
 
   <!-- 5. Pitch -> Payload Transform -->
-  <xacro:property name="pitch_to_payload_xyz" value="0.0 0.0 0.0" />
-  <xacro:property name="pitch_to_payload_rpy" value="0.0 0.0 0.0" />
+  <xacro:property name="pitch_to_payload_xyz" value="-0.000069 -0.000666 0.060957" />
+  <xacro:property name="pitch_to_payload_rpy" value="-1.570796 0.0 -2.783801" />
 
   <!-- 6. Payload -> IMU Transform -->
-  <xacro:property name="payload_to_imu_xyz" value="0.0 0.0 0.0" />
-  <xacro:property name="payload_to_imu_rpy" value="0.0 0.0 0.0" />
+  <xacro:property name="payload_to_imu_xyz" value="-0.018398 0.022833 0.023084" />
+  <xacro:property name="payload_to_imu_rpy" value="3.141593 1.570796 0.0" />
 
   <!-- 7. Payload -> Narrow Camera Transform -->
-  <xacro:property name="payload_to_narrow_xyz" value="0.0 0.0 0.0" />
-  <xacro:property name="payload_to_narrow_rpy" value="0.0 0.0 0.0" />
+  <xacro:property name="payload_to_narrow_xyz" value="-0.025633 0.016500 -0.013660" />
+  <xacro:property name="payload_to_narrow_rpy" value="-1.570796 0.0 -1.570796" />
 
   <!-- 8. Payload -> Tele Camera Transform -->
-  <xacro:property name="payload_to_tele_xyz" value="0.0 0.0 0.0" />
-  <xacro:property name="payload_to_tele_rpy" value="0.0 0.0 0.0" />
+  <xacro:property name="payload_to_tele_xyz" value="-0.025633 -0.016500 -0.013660" />
+  <xacro:property name="payload_to_tele_rpy" value="-1.570796 0.0 -1.570796" />
 
   <!-- 9. Payload -> Wide Camera Transform -->
-  <xacro:property name="payload_to_wide_xyz" value="0.0 0.0 0.0" />
-  <xacro:property name="payload_to_wide_rpy" value="0.0 0.0 0.0" />
+  <xacro:property name="payload_to_wide_xyz" value="0.017012 -0.000740 0.014340" />
+  <xacro:property name="payload_to_wide_rpy" value="-1.570796 0.0 -1.570796" />
 
 </robot>
