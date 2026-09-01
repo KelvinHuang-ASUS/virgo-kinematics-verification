@@ -7,11 +7,11 @@
   <xacro:macro name="virgo_gimbal">
     
     <!-- =================================================================== -->
-    <!-- 10 Kinematic Links                                                  -->
+    <!-- 10 Kinematic Links (Internal Standard Nomenclature)                 -->
     <!-- =================================================================== -->
     
-    <!-- 1. ISP Box Mount Link (Kinematic Root) -->
-    <link name="isp_box_link">
+    <!-- 1. ISP Box Mount Link (Kinematic Root Base) -->
+    <link name="gimbal_mnt_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
@@ -20,8 +20,8 @@
       </visual>
     </link>
 
-    <!-- 2. Suspension Frame Link -->
-    <link name="suspend_link">
+    <!-- 2. Suspension Dampening Plate Link -->
+    <link name="gimbal_susp_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
@@ -30,8 +30,8 @@
       </visual>
     </link>
 
-    <!-- 3. Roll Axis Gimbal Link -->
-    <link name="roll_link">
+    <!-- 3. Roll Axis Motor Link (Motor 3) -->
+    <link name="gimbal_motor_3_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
@@ -40,8 +40,8 @@
       </visual>
     </link>
 
-    <!-- 4. Yaw Axis Gimbal Link -->
-    <link name="yaw_link">
+    <!-- 4. Yaw Axis Motor Link (Motor 2) -->
+    <link name="gimbal_motor_2_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
@@ -50,8 +50,8 @@
       </visual>
     </link>
 
-    <!-- 5. Pitch Axis Gimbal Link -->
-    <link name="pitch_link">
+    <!-- 5. Pitch Axis Motor Link (Motor 1) -->
+    <link name="gimbal_motor_1_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
@@ -61,7 +61,7 @@
     </link>
 
     <!-- 6. Sensor Payload Bracket Link -->
-    <link name="payload_link">
+    <link name="gimbal_payload_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
@@ -70,8 +70,8 @@
       </visual>
     </link>
 
-    <!-- 7. IMU Sensor Link -->
-    <link name="imu_link">
+    <!-- 7. IMU Sensor Link Frame -->
+    <link name="imu_1_frame">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
@@ -81,7 +81,7 @@
     </link>
 
     <!-- 8. Narrow Camera Sensor Link -->
-    <link name="narrow_cam_link">
+    <link name="cam_narrow_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
@@ -91,7 +91,7 @@
     </link>
 
     <!-- 9. Telephoto Camera Sensor Link -->
-    <link name="tele_cam_link">
+    <link name="cam_tele_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
@@ -101,7 +101,7 @@
     </link>
 
     <!-- 10. Wide Camera Sensor Link -->
-    <link name="wide_cam_link">
+    <link name="cam_wide_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
@@ -111,77 +111,77 @@
     </link>
 
     <!-- =================================================================== -->
-    <!-- 9 Kinematic Transformation Joints                                   -->
-    <!-- Topology: ISP BOX -> Suspend -> Roll -> Yaw -> Pitch -> Payload     -->
-    <!--           Payload -> (IMU / Narrow / Tele / Wide)                   -->
+    <!-- 9 Kinematic Transformation Joints (Internal Standard Nomenclature)  -->
+    <!-- Topology: Mount -> Suspension -> Motor 3 (Roll) -> Motor 2 (Yaw) -> -->
+    <!--           Motor 1 (Pitch) -> Payload -> (IMU / Narrow / Tele / Wide)-->
     <!-- =================================================================== -->
 
-    <!-- Joint 1: ISP Box to Suspend (Fixed) -->
-    <joint name="isp_box_to_suspend" type="fixed">
-      <parent link="isp_box_link" />
-      <child link="suspend_link" />
+    <!-- Joint 1: Mount Base to Suspension (Fixed) -->
+    <joint name="gimbal_mnt_to_susp_joint" type="fixed">
+      <parent link="gimbal_mnt_link" />
+      <child link="gimbal_susp_link" />
       <origin xyz="${isp_box_to_suspend_xyz}" rpy="${isp_box_to_suspend_rpy}" />
     </joint>
 
-    <!-- Joint 2: Suspend to Roll Axis (Revolute) -->
-    <joint name="suspend_to_roll" type="revolute">
-      <parent link="suspend_link" />
-      <child link="roll_link" />
+    <!-- Joint 2: Suspension to Motor 3 / Roll Axis (Revolute) -->
+    <joint name="gimbal_susp_to_motor3_joint" type="revolute">
+      <parent link="gimbal_susp_link" />
+      <child link="gimbal_motor_3_link" />
       <origin xyz="${suspend_to_roll_xyz}" rpy="${suspend_to_roll_rpy}" />
       <axis xyz="1 0 0" />
       <limit lower="-0.785398" upper="0.785398" effort="10.0" velocity="1.0" />
     </joint>
 
-    <!-- Joint 3: Roll to Yaw Axis (Revolute) -->
-    <joint name="roll_to_yaw" type="revolute">
-      <parent link="roll_link" />
-      <child link="yaw_link" />
+    <!-- Joint 3: Motor 3 to Motor 2 / Yaw Axis (Revolute) -->
+    <joint name="gimbal_motor3_to_motor2_joint" type="revolute">
+      <parent link="gimbal_motor_3_link" />
+      <child link="gimbal_motor_2_link" />
       <origin xyz="${roll_to_yaw_xyz}" rpy="${roll_to_yaw_rpy}" />
       <axis xyz="0 0 1" />
       <limit lower="-2.79253" upper="2.79253" effort="10.0" velocity="1.0" />
     </joint>
 
-    <!-- Joint 4: Yaw to Pitch Axis (Revolute) -->
-    <joint name="yaw_to_pitch" type="revolute">
-      <parent link="yaw_link" />
-      <child link="pitch_link" />
+    <!-- Joint 4: Motor 2 to Motor 1 / Pitch Axis (Revolute) -->
+    <joint name="gimbal_motor2_to_motor1_joint" type="revolute">
+      <parent link="gimbal_motor_2_link" />
+      <child link="gimbal_motor_1_link" />
       <origin xyz="${yaw_to_pitch_xyz}" rpy="${yaw_to_pitch_rpy}" />
       <axis xyz="0 1 0" />
       <limit lower="-1.5708" upper="0.785398" effort="10.0" velocity="1.0" />
     </joint>
 
-    <!-- Joint 5: Pitch to Payload Bracket (Fixed) -->
-    <joint name="pitch_to_payload" type="fixed">
-      <parent link="pitch_link" />
-      <child link="payload_link" />
+    <!-- Joint 5: Motor 1 to Payload Bracket (Fixed) -->
+    <joint name="gimbal_motor1_to_payload_joint" type="fixed">
+      <parent link="gimbal_motor_1_link" />
+      <child link="gimbal_payload_link" />
       <origin xyz="${pitch_to_payload_xyz}" rpy="${pitch_to_payload_rpy}" />
     </joint>
 
     <!-- Joint 6: Payload to IMU (Fixed) -->
-    <joint name="payload_to_imu" type="fixed">
-      <parent link="payload_link" />
-      <child link="imu_link" />
+    <joint name="gimbal_payload_to_imu_joint" type="fixed">
+      <parent link="gimbal_payload_link" />
+      <child link="imu_1_frame" />
       <origin xyz="${payload_to_imu_xyz}" rpy="${payload_to_imu_rpy}" />
     </joint>
 
     <!-- Joint 7: Payload to Narrow Camera (Fixed) -->
-    <joint name="payload_to_narrow" type="fixed">
-      <parent link="payload_link" />
-      <child link="narrow_cam_link" />
+    <joint name="gimbal_payload_to_narrow_joint" type="fixed">
+      <parent link="gimbal_payload_link" />
+      <child link="cam_narrow_link" />
       <origin xyz="${payload_to_narrow_xyz}" rpy="${payload_to_narrow_rpy}" />
     </joint>
 
     <!-- Joint 8: Payload to Tele Camera (Fixed) -->
-    <joint name="payload_to_tele" type="fixed">
-      <parent link="payload_link" />
-      <child link="tele_cam_link" />
+    <joint name="gimbal_payload_to_tele_joint" type="fixed">
+      <parent link="gimbal_payload_link" />
+      <child link="cam_tele_link" />
       <origin xyz="${payload_to_tele_xyz}" rpy="${payload_to_tele_rpy}" />
     </joint>
 
     <!-- Joint 9: Payload to Wide Camera (Fixed) -->
-    <joint name="payload_to_wide" type="fixed">
-      <parent link="payload_link" />
-      <child link="wide_cam_link" />
+    <joint name="gimbal_payload_to_wide_joint" type="fixed">
+      <parent link="gimbal_payload_link" />
+      <child link="cam_wide_link" />
       <origin xyz="${payload_to_wide_xyz}" rpy="${payload_to_wide_rpy}" />
     </joint>
 
