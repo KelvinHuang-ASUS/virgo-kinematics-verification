@@ -52,6 +52,8 @@ Dedicated sandbox environments are established under the `experiments/` director
 
 - **[01. Inertia Macros & Setup](experiments/01_inertia_macros_setup/)**: Standalone workspace for closed-form rigid body inertia parameter calculation, COM alignment, and camera/LRF sensor frame rotation matrix validation.
 - **[02. Joint Limits & Dynamics](experiments/02_joint_limits_and_dynamics/)**: Mechanical range boundaries (`revolute` joints), angular limits ($\pm 160^\circ$ Yaw, $\pm 45^\circ$ Roll, $-90^\circ / +45^\circ$ Pitch), and joint dynamics (damping & friction).
+- **[03. CAD Coordinate Alignment](experiments/03_cad_coordinate_alignment/)**: Production-grade kinematic baseline aligned with vendor AP242 STEP coordinate frames and ER_260820 transformation matrices.
+
 
 
 

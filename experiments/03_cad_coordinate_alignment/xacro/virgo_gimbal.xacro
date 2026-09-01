@@ -1,0 +1,190 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Include vendor CAD transformation properties -->
+  <xacro:include filename="virgo_cad_transforms.xacro" />
+
+  <xacro:macro name="virgo_gimbal">
+    
+    <!-- =================================================================== -->
+    <!-- 10 Kinematic Links                                                  -->
+    <!-- =================================================================== -->
+    
+    <!-- 1. ISP Box Mount Link (Kinematic Root) -->
+    <link name="isp_box_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.08 0.08 0.04" />
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- 2. Suspension Frame Link -->
+    <link name="suspend_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.07 0.07 0.02" />
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- 3. Roll Axis Gimbal Link -->
+    <link name="roll_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="0.02" length="0.04" />
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- 4. Yaw Axis Gimbal Link -->
+    <link name="yaw_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="0.02" length="0.04" />
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- 5. Pitch Axis Gimbal Link -->
+    <link name="pitch_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="0.02" length="0.04" />
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- 6. Sensor Payload Bracket Link -->
+    <link name="payload_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.10 0.06 0.05" />
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- 7. IMU Sensor Link -->
+    <link name="imu_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.015 0.015 0.008" />
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- 8. Narrow Camera Sensor Link -->
+    <link name="narrow_cam_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="0.012" length="0.025" />
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- 9. Telephoto Camera Sensor Link -->
+    <link name="tele_cam_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="0.015" length="0.035" />
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- 10. Wide Camera Sensor Link -->
+    <link name="wide_cam_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="0.010" length="0.020" />
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- =================================================================== -->
+    <!-- 9 Kinematic Transformation Joints                                   -->
+    <!-- Topology: ISP BOX -> Suspend -> Roll -> Yaw -> Pitch -> Payload     -->
+    <!--           Payload -> (IMU / Narrow / Tele / Wide)                   -->
+    <!-- =================================================================== -->
+
+    <!-- Joint 1: ISP Box to Suspend (Fixed) -->
+    <joint name="isp_box_to_suspend" type="fixed">
+      <parent link="isp_box_link" />
+      <child link="suspend_link" />
+      <origin xyz="${isp_box_to_suspend_xyz}" rpy="${isp_box_to_suspend_rpy}" />
+    </joint>
+
+    <!-- Joint 2: Suspend to Roll Axis (Revolute) -->
+    <joint name="suspend_to_roll" type="revolute">
+      <parent link="suspend_link" />
+      <child link="roll_link" />
+      <origin xyz="${suspend_to_roll_xyz}" rpy="${suspend_to_roll_rpy}" />
+      <axis xyz="1 0 0" />
+      <limit lower="-0.785398" upper="0.785398" effort="10.0" velocity="1.0" />
+    </joint>
+
+    <!-- Joint 3: Roll to Yaw Axis (Revolute) -->
+    <joint name="roll_to_yaw" type="revolute">
+      <parent link="roll_link" />
+      <child link="yaw_link" />
+      <origin xyz="${roll_to_yaw_xyz}" rpy="${roll_to_yaw_rpy}" />
+      <axis xyz="0 0 1" />
+      <limit lower="-2.79253" upper="2.79253" effort="10.0" velocity="1.0" />
+    </joint>
+
+    <!-- Joint 4: Yaw to Pitch Axis (Revolute) -->
+    <joint name="yaw_to_pitch" type="revolute">
+      <parent link="yaw_link" />
+      <child link="pitch_link" />
+      <origin xyz="${yaw_to_pitch_xyz}" rpy="${yaw_to_pitch_rpy}" />
+      <axis xyz="0 1 0" />
+      <limit lower="-1.5708" upper="0.785398" effort="10.0" velocity="1.0" />
+    </joint>
+
+    <!-- Joint 5: Pitch to Payload Bracket (Fixed) -->
+    <joint name="pitch_to_payload" type="fixed">
+      <parent link="pitch_link" />
+      <child link="payload_link" />
+      <origin xyz="${pitch_to_payload_xyz}" rpy="${pitch_to_payload_rpy}" />
+    </joint>
+
+    <!-- Joint 6: Payload to IMU (Fixed) -->
+    <joint name="payload_to_imu" type="fixed">
+      <parent link="payload_link" />
+      <child link="imu_link" />
+      <origin xyz="${payload_to_imu_xyz}" rpy="${payload_to_imu_rpy}" />
+    </joint>
+
+    <!-- Joint 7: Payload to Narrow Camera (Fixed) -->
+    <joint name="payload_to_narrow" type="fixed">
+      <parent link="payload_link" />
+      <child link="narrow_cam_link" />
+      <origin xyz="${payload_to_narrow_xyz}" rpy="${payload_to_narrow_rpy}" />
+    </joint>
+
+    <!-- Joint 8: Payload to Tele Camera (Fixed) -->
+    <joint name="payload_to_tele" type="fixed">
+      <parent link="payload_link" />
+      <child link="tele_cam_link" />
+      <origin xyz="${payload_to_tele_xyz}" rpy="${payload_to_tele_rpy}" />
+    </joint>
+
+    <!-- Joint 9: Payload to Wide Camera (Fixed) -->
+    <joint name="payload_to_wide" type="fixed">
+      <parent link="payload_link" />
+      <child link="wide_cam_link" />
+      <origin xyz="${payload_to_wide_xyz}" rpy="${payload_to_wide_rpy}" />
+    </joint>
+
+  </xacro:macro>
+
+</robot>

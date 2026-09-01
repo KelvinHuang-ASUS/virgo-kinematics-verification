@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <!--
+    ===========================================================================
+    Vendor CAD Transformation Specifications (ER_260820 Baseline)
+    ===========================================================================
+    This file contains pre-reserved transformation properties derived from
+    vendor CAD Datum Coordinate Systems (CAD_Model_ER_260820).
+    
+    Units:
+      - Translational (xyz): Meters [m] (converted from millimeters)
+      - Rotational (rpy): Radians [rad] (converted from degrees)
+  -->
+
+  <!-- 1. ISP Box -> Suspend Transform -->
+  <xacro:property name="isp_box_to_suspend_xyz" value="0.0 0.0 0.0" />
+  <xacro:property name="isp_box_to_suspend_rpy" value="0.0 0.0 0.0" />
+
+  <!-- 2. Suspend -> Roll Transform -->
+  <xacro:property name="suspend_to_roll_xyz" value="0.0 0.0 0.0" />
+  <xacro:property name="suspend_to_roll_rpy" value="0.0 0.0 0.0" />
+
+  <!-- 3. Roll -> Yaw Transform -->
+  <xacro:property name="roll_to_yaw_xyz" value="0.0 0.0 0.0" />
+  <xacro:property name="roll_to_yaw_rpy" value="0.0 0.0 0.0" />
+
+  <!-- 4. Yaw -> Pitch Transform -->
+  <xacro:property name="yaw_to_pitch_xyz" value="0.0 0.0 0.0" />
+  <xacro:property name="yaw_to_pitch_rpy" value="0.0 0.0 0.0" />
+
+  <!-- 5. Pitch -> Payload Transform -->
+  <xacro:property name="pitch_to_payload_xyz" value="0.0 0.0 0.0" />
+  <xacro:property name="pitch_to_payload_rpy" value="0.0 0.0 0.0" />
+
+  <!-- 6. Payload -> IMU Transform -->
+  <xacro:property name="payload_to_imu_xyz" value="0.0 0.0 0.0" />
+  <xacro:property name="payload_to_imu_rpy" value="0.0 0.0 0.0" />
+
+  <!-- 7. Payload -> Narrow Camera Transform -->
+  <xacro:property name="payload_to_narrow_xyz" value="0.0 0.0 0.0" />
+  <xacro:property name="payload_to_narrow_rpy" value="0.0 0.0 0.0" />
+
+  <!-- 8. Payload -> Tele Camera Transform -->
+  <xacro:property name="payload_to_tele_xyz" value="0.0 0.0 0.0" />
+  <xacro:property name="payload_to_tele_rpy" value="0.0 0.0 0.0" />
+
+  <!-- 9. Payload -> Wide Camera Transform -->
+  <xacro:property name="payload_to_wide_xyz" value="0.0 0.0 0.0" />
+  <xacro:property name="payload_to_wide_rpy" value="0.0 0.0 0.0" />
+
+</robot>

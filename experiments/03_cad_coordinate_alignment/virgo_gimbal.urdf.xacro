@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="virgo_gimbal_exp03">
+  <xacro:include filename="xacro/virgo_gimbal.xacro" />
+  <xacro:virgo_gimbal />
+</robot>
