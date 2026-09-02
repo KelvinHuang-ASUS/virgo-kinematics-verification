@@ -156,6 +156,7 @@ def compute_forward_kinematics(links: list, joints: list):
 def build_3d_interactive_figure(links: list, joints: list, link_poses: dict, axis_length: float = 0.025) -> go.Figure:
     """
     Constructs an interactive 3D Plotly visualization of URDF coordinate frames.
+    Styled in Clean White Presentation Theme.
     """
     fig = go.Figure()
 
@@ -174,7 +175,7 @@ def build_3d_interactive_figure(links: list, joints: list, link_poses: dict, axi
         z=joint_lines_z,
         mode="lines",
         name="Kinematic Joint Linkage",
-        line=dict(color="#64748B", width=4, dash="solid"),
+        line=dict(color="#64748B", width=3, dash="solid"),
         hoverinfo="none",
         showlegend=True
     ))
@@ -272,59 +273,62 @@ def build_3d_interactive_figure(links: list, joints: list, link_poses: dict, axi
         z=origin_z,
         mode="markers+text",
         name="Link Origins & Labels",
-        marker=dict(size=6, color="#F59E0B", symbol="circle", opacity=0.9),
+        marker=dict(size=7, color="#D97706", symbol="circle", opacity=0.95),
         text=origin_labels,
         textposition="top center",
-        textfont=dict(size=11, color="#F8FAFC", family="Inter, sans-serif"),
+        textfont=dict(size=11, color="#0F172A", family="Inter, sans-serif"),
         hoverinfo="text",
         hovertext=hover_texts,
         showlegend=True
     ))
 
-    # 4. Configure modern dark mode layout and 3D scene controls
+    # 4. Configure professional Clean White Presentation layout and 3D scene controls
     fig.update_layout(
         title=dict(
             text="VIRGO Gimbal Kinematic Chain — Interactive 3D Frame Inspector<br>"
                  "<sup>RGB Axes Definition: Red = X, Green = Y, Blue = Z | CAD Model Alignment ER_260820</sup>",
-            font=dict(size=18, color="#F8FAFC", family="Inter, sans-serif"),
+            font=dict(size=18, color="#0F172A", family="Inter, sans-serif"),
             x=0.02,
             y=0.96
         ),
-        paper_bgcolor="#0B0F19",
-        plot_bgcolor="#0B0F19",
-        template="plotly_dark",
+        paper_bgcolor="#FFFFFF",
+        plot_bgcolor="#FFFFFF",
+        template="plotly_white",
         scene=dict(
             xaxis=dict(
-                title="X (meters)",
-                backgroundcolor="#0F172A",
-                gridcolor="#1E293B",
+                title=dict(text="X (meters)", font=dict(color="#334155")),
+                tickfont=dict(color="#334155"),
+                backgroundcolor="#F8FAFC",
+                gridcolor="#E2E8F0",
                 showbackground=True,
-                zerolinecolor="#475569"
+                zerolinecolor="#94A3B8"
             ),
             yaxis=dict(
-                title="Y (meters)",
-                backgroundcolor="#0F172A",
-                gridcolor="#1E293B",
+                title=dict(text="Y (meters)", font=dict(color="#334155")),
+                tickfont=dict(color="#334155"),
+                backgroundcolor="#F8FAFC",
+                gridcolor="#E2E8F0",
                 showbackground=True,
-                zerolinecolor="#475569"
+                zerolinecolor="#94A3B8"
             ),
             zaxis=dict(
-                title="Z (meters)",
-                backgroundcolor="#0F172A",
-                gridcolor="#1E293B",
+                title=dict(text="Z (meters)", font=dict(color="#334155")),
+                tickfont=dict(color="#334155"),
+                backgroundcolor="#F8FAFC",
+                gridcolor="#E2E8F0",
                 showbackground=True,
-                zerolinecolor="#475569"
+                zerolinecolor="#94A3B8"
             ),
             aspectmode="data",  # 1:1:1 physical aspect ratio
             camera=dict(
-                eye=dict(x=-1.6, y=-1.6, z=1.2),
+                eye=dict(x=-1.8, y=-1.8, z=1.0),
                 up=dict(x=0, y=0, z=1)
             )
         ),
         legend=dict(
-            font=dict(color="#CBD5E1", size=12),
-            bgcolor="rgba(15, 23, 42, 0.8)",
-            bordercolor="#334155",
+            font=dict(color="#334155", size=12),
+            bgcolor="rgba(255, 255, 255, 0.9)",
+            bordercolor="#CBD5E1",
             borderwidth=1,
             x=0.01,
             y=0.85
