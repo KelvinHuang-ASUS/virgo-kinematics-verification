@@ -68,6 +68,7 @@ Automated pipeline runs (`generate_topology.py` and `render_joint_graph.py`) pro
 
 ### A. Internal Standard Artifacts (Latest Pipeline Generation)
 - **Compiled URDF Model**: [`../../output/03_cad_coordinate_alignment/virgo_gimbal_compiled.urdf`](../../output/03_cad_coordinate_alignment/virgo_gimbal_compiled.urdf)
+- **Interactive 3D Frame Inspector**: [`../../output/03_cad_coordinate_alignment/virgo_gimbal_interactive_3d.html`](../../output/03_cad_coordinate_alignment/virgo_gimbal_interactive_3d.html)
 - **Kinematic TF Tree Topology**:
   - Graphviz DOT descriptor: [`../../output/03_cad_coordinate_alignment/virgo_gimbal_topology.gv`](../../output/03_cad_coordinate_alignment/virgo_gimbal_topology.gv)
   - PDF vector tree graph: [`../../output/03_cad_coordinate_alignment/virgo_gimbal_topology.pdf`](../../output/03_cad_coordinate_alignment/virgo_gimbal_topology.pdf)
@@ -90,6 +91,52 @@ Automated pipeline runs (`generate_topology.py` and `render_joint_graph.py`) pro
 
 ---
 
+## 3D Kinematic Visual Proof & Motion Demonstration
+
+To perform interactive 3D inspection of the compiled URDF coordinate frames and verify exact datum spatial alignment, open the generated Plotly 3D HTML artifact:
+
+- **Interactive 3D Inspector**: [`../../output/03_cad_coordinate_alignment/virgo_gimbal_interactive_3d.html`](../../output/03_cad_coordinate_alignment/virgo_gimbal_interactive_3d.html)
+
+### How to View via VS Code Live Preview:
+1. In the VS Code File Explorer, navigate to [`output/03_cad_coordinate_alignment/virgo_gimbal_interactive_3d.html`](../../output/03_cad_coordinate_alignment/virgo_gimbal_interactive_3d.html).
+2. Right-click the file and select **Show Preview** (or **Live Preview: Open Preview**).
+3. Alternatively, open the file directly in any modern Web Browser (Google Chrome, Mozilla Firefox, or Microsoft Edge).
+4. Use left-click drag to rotate the 3D scene, right-click drag to pan, and scroll to zoom in on individual link frames. Hover over any frame origin to inspect absolute world coordinates $(x, y, z)$ and relative transformation angles.
+
+---
+
+### RGB Coordinate Axes Conventions & Optical Camera Vector Rules
+
+- **Coordinate Frame RGB Axis Color Mapping**:
+  - **Red Axis**: $+X$ Direction (Local Roll vector / longitudinal axis)
+  - **Green Axis**: $+Y$ Direction (Local Pitch vector / lateral axis)
+  - **Blue Axis**: $+Z$ Direction (Local Yaw vector / vertical height axis)
+
+- **Optical Camera Vector Rules**:
+  - The sensor camera frames (`cam_narrow_link`, `cam_tele_link`, `cam_wide_link`) are transformed relative to `gimbal_payload_link` with pitch/roll orientation offsets (`rpy="-1.570796 0.0 -1.570796"`).
+  - The local $+Z$ vector (Blue) defines the camera optical pointing axis directed forward toward the target scene.
+  - The local $+X$ (Red) and $+Y$ (Green) vectors define horizontal and vertical image sensor pixel plane orientations respectively.
+
+---
+
+### Visual Proof & Motion Preview Artifacts
+
+The following preview artifacts illustrate spatial coordinate alignment, sensor pointing, and 3-axis gimbal range of motion:
+
+#### 1. 3D Coordinate Frames & Persistent Origin Labels Preview
+![3D Frame Alignment](../../docs/images/05_exp03_3d_frames_alignment.png)
+*Figure 1: Complete 10-node kinematic chain showing persistent link origin labels, RGB coordinate axes, and inter-joint spatial linkages.*
+
+#### 2. Optical Camera Axes & Sensor Pointing Preview
+![Camera Optical Axes](../../docs/images/06_exp03_camera_optical_axes.png)
+*Figure 2: Multi-camera payload sensor placement illustrating aligned optical pointing vectors (+Z axis forward) across Narrow, Telephoto, and Wide lenses.*
+
+#### 3. 3-Axis Articulation & Joint Range Limits Preview
+![3-Axis Motion Limits](../../docs/images/07_exp03_3axis_motion_limits.gif)
+*Figure 3: Dynamic motion sweep demonstrating 3-axis joint range limits (Roll $\pm 45^\circ$, Yaw $\pm 160^\circ$, Pitch $-90^\circ / +45^\circ$) without frame collisions or singular gimbal lock.*
+
+---
+
 ## External Inspection & Verification Procedure
 
 To inspect and verify embedded Datum Coordinate Systems (CS) directly against vendor 3D models:
@@ -103,3 +150,4 @@ To inspect and verify embedded Datum Coordinate Systems (CS) directly against ve
 2. Load the STEP file `cad_specs/ASUS-ER-EL-AS(0901).STEP`.
 3. In the left panel, enable visibility for **Datum Coordinate Systems**.
 4. Verify local origin positions $(x, y, z)$ in meters and orientation vectors against the parameters specified in `cad_specs/multiply the chain 0901.xlsx` (Sheet: `CAD_Model_ER_260820`).
+

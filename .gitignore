@@ -27,10 +27,13 @@ venv/
 !output/*.gv
 !output/*.pdf
 !output/*.png
+!output/*.html
 !output/*/*.urdf
 !output/*/*.gv
 !output/*/*.pdf
 !output/*/*.png
+!output/*/*.html
+
 
 
 
