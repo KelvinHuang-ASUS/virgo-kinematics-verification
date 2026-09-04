@@ -160,6 +160,9 @@ def build_3d_interactive_figure(links: list, joints: list, link_poses: dict, axi
     """
     fig = go.Figure()
 
+    # Define intermediate camera body links to filter out (avoiding spatial overlap with optical *_cv_frame)
+    exclude_links = {"cam_narrow_link", "cam_tele_link", "cam_wide_link"}
+
     # 1. Add kinematic structure joint lines (parent origin -> child origin)
     joint_lines_x, joint_lines_y, joint_lines_z = [], [], []
     for j in joints:
@@ -180,12 +183,12 @@ def build_3d_interactive_figure(links: list, joints: list, link_poses: dict, axi
         showlegend=True
     ))
 
-    # 2. Prepare coordinate axes vectors for each link
+    # 2. Prepare coordinate axes vectors for each link (excluding intermediate camera body links)
     # Track legend additions to prevent duplicate entries
     legend_added = {"X": False, "Y": False, "Z": False}
 
     for link_name in links:
-        if link_name not in link_poses:
+        if link_name in exclude_links or link_name not in link_poses:
             continue
 
         pos = link_poses[link_name]["pos"]
@@ -240,20 +243,20 @@ def build_3d_interactive_figure(links: list, joints: list, link_poses: dict, axi
         ))
         legend_added["Z"] = True
 
-    # 3. Add link origin markers with persistent labels
+    # 3. Add link origin markers with persistent labels including world (X, Y, Z) coordinates
     origin_x, origin_y, origin_z = [], [], []
     origin_labels = []
     hover_texts = []
 
     for link_name in links:
-        if link_name not in link_poses:
+        if link_name in exclude_links or link_name not in link_poses:
             continue
         p_info = link_poses[link_name]
         pos = p_info["pos"]
         origin_x.append(pos[0])
         origin_y.append(pos[1])
         origin_z.append(pos[2])
-        origin_labels.append(f"  <b>{link_name}</b>  ")
+        origin_labels.append(f"<b>{link_name}</b><br>({pos[0]:.4f}, {pos[1]:.4f}, {pos[2]:.4f})")
 
         j_info = f"Parent Joint: {p_info['parent_joint']}" if p_info['parent_joint'] else "Root Base Link"
         rpy_deg = [math.degrees(val) for val in p_info["rpy_rel"]]
@@ -276,7 +279,7 @@ def build_3d_interactive_figure(links: list, joints: list, link_poses: dict, axi
         marker=dict(size=7, color="#D97706", symbol="circle", opacity=0.95),
         text=origin_labels,
         textposition="top center",
-        textfont=dict(size=11, color="#0F172A", family="Inter, sans-serif"),
+        textfont=dict(size=10, color="#0F172A", family="Inter, sans-serif"),
         hoverinfo="text",
         hovertext=hover_texts,
         showlegend=True

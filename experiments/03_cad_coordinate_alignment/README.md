@@ -111,6 +111,7 @@ To perform interactive 3D inspection of the compiled URDF coordinate frames and 
 2. Right-click the file and select **Show Preview** (or **Live Preview: Open Preview**).
 3. Alternatively, open the file directly in any modern Web Browser (Google Chrome, Mozilla Firefox, or Microsoft Edge).
 4. Use left-click drag to rotate the 3D scene, right-click drag to pan, and scroll to zoom in on individual link frames. Hover over any frame origin to inspect absolute world coordinates $(x, y, z)$ and relative transformation angles.
+5. **Decluttered Camera Frame Display**: Intermediate camera body links (`cam_*_link`) are automatically filtered out from rendering in the 3D canvas to avoid spatial coordinate axis overlap. The 3D inspector directly renders `cam_*_cv_frame` with explicit absolute world $(X, Y, Z)$ position labels in meters (formatted to 4 decimal places).
 
 ---
 
