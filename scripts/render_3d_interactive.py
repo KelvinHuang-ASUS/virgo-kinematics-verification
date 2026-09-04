@@ -160,12 +160,14 @@ def build_3d_interactive_figure(links: list, joints: list, link_poses: dict, axi
     """
     fig = go.Figure()
 
-    # Define intermediate camera body links to filter out (avoiding spatial overlap with optical *_cv_frame)
-    exclude_links = {"cam_narrow_link", "cam_tele_link", "cam_wide_link"}
+    # Define virtual algorithm optical frames to filter out from 3D visualization (rendered in Graphviz topology DOT)
+    exclude_links = {"cam_narrow_cv_frame", "cam_tele_cv_frame", "cam_wide_cv_frame"}
 
     # 1. Add kinematic structure joint lines (parent origin -> child origin)
     joint_lines_x, joint_lines_y, joint_lines_z = [], [], []
     for j in joints:
+        if j["child"] in exclude_links or j["parent"] in exclude_links:
+            continue
         parent_pos = link_poses[j["parent"]]["pos"]
         child_pos = link_poses[j["child"]]["pos"]
         joint_lines_x.extend([parent_pos[0], child_pos[0], None])
