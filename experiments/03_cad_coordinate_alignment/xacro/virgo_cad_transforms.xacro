@@ -48,4 +48,8 @@
   <xacro:property name="payload_to_wide_xyz" value="0.017012 -0.000740 0.014340" />
   <xacro:property name="payload_to_wide_rpy" value="-1.570796 0.0 -1.570796" />
 
+  <!-- 10. Camera Link -> OpenCV Visual Frame Transform -->
+  <xacro:property name="cam_link_to_cv_xyz" value="0.0 0.0 0.0" />
+  <xacro:property name="cam_link_to_cv_rpy" value="-1.570796 0.0 -1.570796" />
+
 </robot>

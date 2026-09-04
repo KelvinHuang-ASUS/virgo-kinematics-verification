@@ -16,7 +16,7 @@
       - Rotational (rpy): Radians [rad] (converted from Euler angles / matrix)
   -->
   <!-- =================================================================== -->
-  <!-- 10 Kinematic Links (Internal Standard Nomenclature)                 -->
+  <!-- 13 Kinematic Links (Internal Standard Nomenclature & OpenCV Frames) -->
   <!-- =================================================================== -->
   <!-- 1. ISP Box Mount Link (Kinematic Root Base) -->
   <link name="gimbal_mnt_link">
@@ -108,10 +108,17 @@
       </geometry>
     </visual>
   </link>
+  <!-- 11. Narrow Camera OpenCV Visual Frame Link -->
+  <link name="cam_narrow_cv_frame"/>
+  <!-- 12. Telephoto Camera OpenCV Visual Frame Link -->
+  <link name="cam_tele_cv_frame"/>
+  <!-- 13. Wide Camera OpenCV Visual Frame Link -->
+  <link name="cam_wide_cv_frame"/>
   <!-- =================================================================== -->
-  <!-- 9 Kinematic Transformation Joints (Internal Standard Nomenclature)  -->
+  <!-- 12 Kinematic Transformation Joints (Internal Standard Nomenclature) -->
   <!-- Topology: Mount -> Suspension -> Motor 3 (Roll) -> Motor 2 (Yaw) -> -->
   <!--           Motor 1 (Pitch) -> Payload -> (IMU / Narrow / Tele / Wide)-->
+  <!--           -> (Narrow_CV / Tele_CV / Wide_CV)                        -->
   <!-- =================================================================== -->
   <!-- Joint 1: Mount Base to Suspension (Fixed) -->
   <joint name="gimbal_mnt_to_susp_joint" type="fixed">
@@ -172,5 +179,23 @@
     <parent link="gimbal_payload_link"/>
     <child link="cam_wide_link"/>
     <origin rpy="-1.570796 0.0 -1.570796" xyz="0.017012 -0.000740 0.014340"/>
+  </joint>
+  <!-- Joint 10: Narrow Camera Link to OpenCV Visual Frame (Fixed) -->
+  <joint name="cam_narrow_cv_j" type="fixed">
+    <parent link="cam_narrow_link"/>
+    <child link="cam_narrow_cv_frame"/>
+    <origin rpy="-1.570796 0.0 -1.570796" xyz="0.0 0.0 0.0"/>
+  </joint>
+  <!-- Joint 11: Tele Camera Link to OpenCV Visual Frame (Fixed) -->
+  <joint name="cam_tele_cv_j" type="fixed">
+    <parent link="cam_tele_link"/>
+    <child link="cam_tele_cv_frame"/>
+    <origin rpy="-1.570796 0.0 -1.570796" xyz="0.0 0.0 0.0"/>
+  </joint>
+  <!-- Joint 12: Wide Camera Link to OpenCV Visual Frame (Fixed) -->
+  <joint name="cam_wide_cv_j" type="fixed">
+    <parent link="cam_wide_link"/>
+    <child link="cam_wide_cv_frame"/>
+    <origin rpy="-1.570796 0.0 -1.570796" xyz="0.0 0.0 0.0"/>
   </joint>
 </robot>

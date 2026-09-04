@@ -20,6 +20,9 @@ This document defines the cross-reference mapping between vendor CAD designation
 | **`CAM_NARROW_ASSY`** | `narrow_cam_link` | **`cam_narrow_link`** | Narrow Field-of-View (NFOV) optical camera frame. |
 | **`CAM_TELE_ASSY`** | `tele_cam_link` | **`cam_tele_link`** | Telephoto long-range camera reference frame. |
 | **`CAM_WIDE_ASSY`** | `wide_cam_link` | **`cam_wide_link`** | Wide Field-of-View (WFOV) camera reference frame. |
+| **`CAM_NARROW_CV`** | N/A | **`cam_narrow_cv_frame`** | OpenCV optical reference frame for Narrow camera ($Z$-axis forward optical axis, $X$-axis right, $Y$-axis down). |
+| **`CAM_TELE_CV`** | N/A | **`cam_tele_cv_frame`** | OpenCV optical reference frame for Telephoto camera ($Z$-axis forward optical axis, $X$-axis right, $Y$-axis down). |
+| **`CAM_WIDE_CV`** | N/A | **`cam_wide_cv_frame`** | OpenCV optical reference frame for Wide camera ($Z$-axis forward optical axis, $X$-axis right, $Y$-axis down). |
 
 ### B. Joint Naming & Kinematic DoF Mapping
 
@@ -34,6 +37,9 @@ This document defines the cross-reference mapping between vendor CAD designation
 | **`PAYLOAD` $\rightarrow$ `NARROW_CAM`** | `payload_to_narrow` | **`gimbal_payload_to_narrow_joint`** | Fixed | Optical alignment ($0$ DoF) |
 | **`PAYLOAD` $\rightarrow$ `TELE_CAM`** | `payload_to_tele` | **`gimbal_payload_to_tele_joint`** | Fixed | Optical alignment ($0$ DoF) |
 | **`PAYLOAD` $\rightarrow$ `WIDE_CAM`** | `payload_to_wide` | **`gimbal_payload_to_wide_joint`** | Fixed | Optical alignment ($0$ DoF) |
+| **`NARROW_CAM` $\rightarrow$ `NARROW_CV`** | N/A | **`cam_narrow_cv_j`** | Fixed | Optical frame convention rotation ($0$ DoF) |
+| **`TELE_CAM` $\rightarrow$ `TELE_CV`** | N/A | **`cam_tele_cv_j`** | Fixed | Optical frame convention rotation ($0$ DoF) |
+| **`WIDE_CAM` $\rightarrow$ `WIDE_CV`** | N/A | **`cam_wide_cv_j`** | Fixed | Optical frame convention rotation ($0$ DoF) |
 
 ---
 
@@ -49,3 +55,7 @@ This document defines the cross-reference mapping between vendor CAD designation
 ### Version 1.1.0 (Internal Standard Mapping Refactoring)
 - **Rationale**: Aligned all link identifiers and joint tags with the production system naming standards (`gimbal_mnt_link`, `gimbal_susp_link`, `gimbal_motor_3_link` for Roll, `gimbal_motor_2_link` for Yaw, `gimbal_motor_1_link` for Pitch, `gimbal_payload_link`, `imu_1_frame`, `cam_narrow_link`, `cam_tele_link`, `cam_wide_link`).
 - **Kinematic Integrity**: The transformation parameters ($x, y, z$ translations and $r, p, y$ rotations) remain identical to the vendor `CAD_Model_ER_260820` specification sheet while enforcing consistent naming across ROS 2 TF topics and internal verification tools.
+
+### Version 1.2.0 (OpenCV Camera Optical Frame Architecture Optimization)
+- **Rationale**: Extended camera links (`cam_narrow_link`, `cam_tele_link`, `cam_wide_link`) with standardized OpenCV camera optical reference frames (`cam_narrow_cv_frame`, `cam_tele_cv_frame`, `cam_wide_cv_frame`) and fixed joints (`cam_narrow_cv_j`, `cam_tele_cv_j`, `cam_wide_cv_j`).
+- **Coordinate System Alignment**: Formally bridged ROS REP-103 robot body frame conventions ($X$-axis forward, $Y$-axis left, $Z$-axis up) with standard optical frame conventions ($Z$-axis forward optical axis, $X$-axis right, $Y$-axis down) using static transform $rpy = (-1.570796, 0.0, -1.570796)$.

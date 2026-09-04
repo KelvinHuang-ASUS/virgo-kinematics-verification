@@ -13,9 +13,9 @@ Establish a production-grade kinematic baseline based on vendor-provided AP242 S
 
 ---
 
-## Kinematic Topology Chain (10 Internal Standard Nodes)
+## Kinematic Topology Chain (13 Internal Standard & Optical Nodes)
 
-The kinematic chain follows a 10-node hierarchical transformation structure from the mount base down to individual payload sensors using internal system standard nomenclature:
+The kinematic chain follows a 13-node hierarchical transformation structure from the mount base down to individual payload sensors and dedicated OpenCV optical frames using internal system standard nomenclature:
 
 ```
 gimbal_mnt_link
@@ -26,8 +26,11 @@ gimbal_mnt_link
                           └── gimbal_payload_link
                                 ├── imu_1_frame
                                 ├── cam_narrow_link
+                                │     └── cam_narrow_cv_frame (OpenCV Optical Frame)
                                 ├── cam_tele_link
+                                │     └── cam_tele_cv_frame (OpenCV Optical Frame)
                                 └── cam_wide_link
+                                      └── cam_wide_cv_frame (OpenCV Optical Frame)
 ```
 
 ### Node List & Responsibilities
@@ -38,15 +41,18 @@ gimbal_mnt_link
 5. **`gimbal_motor_1_link`**: Gimbal Pitch axis motor link (Motor 1).
 6. **`gimbal_payload_link`**: Sensor payload carrier bracket link.
 7. **`imu_1_frame`**: Inertial Measurement Unit reference frame.
-8. **`cam_narrow_link`**: Narrow Field of View (NFOV) camera frame.
-9. **`cam_tele_link`**: Telephoto camera reference frame.
-10. **`cam_wide_link`**: Wide Field of View (WFOV) camera reference frame.
+8. **`cam_narrow_link`**: Narrow Field of View (NFOV) camera body frame (ROS REP-103).
+9. **`cam_tele_link`**: Telephoto camera body frame (ROS REP-103).
+10. **`cam_wide_link`**: Wide Field of View (WFOV) camera body frame (ROS REP-103).
+11. **`cam_narrow_cv_frame`**: Narrow camera OpenCV visual/optical reference frame.
+12. **`cam_tele_cv_frame`**: Telephoto camera OpenCV visual/optical reference frame.
+13. **`cam_wide_cv_frame`**: Wide camera OpenCV visual/optical reference frame.
 
 ---
 
 ## ER_260820 Exact Transformation Matrix Constants
 
-The 9 coordinate transformations connecting the 10 nodes are defined in [`xacro/virgo_cad_transforms.xacro`](xacro/virgo_cad_transforms.xacro) based on exact matrix conversions, mapped to internal standard joint names in [`xacro/virgo_gimbal.xacro`](xacro/virgo_gimbal.xacro):
+The 12 coordinate transformations connecting the 13 nodes are defined in [`xacro/virgo_cad_transforms.xacro`](xacro/virgo_cad_transforms.xacro) based on exact matrix conversions, mapped to internal standard joint names in [`xacro/virgo_gimbal.xacro`](xacro/virgo_gimbal.xacro):
 
 | Internal Standard Joint Name | Parent Link | Child Link | Translation `xyz` (meters) | Rotation `rpy` (radians) |
 | :--- | :--- | :--- | :--- | :--- |
@@ -59,6 +65,9 @@ The 9 coordinate transformations connecting the 10 nodes are defined in [`xacro/
 | **`gimbal_payload_to_narrow_joint`** | `gimbal_payload_link` | `cam_narrow_link` | `-0.025633 0.016500 -0.013660` | `-1.570796 0.0 -1.570796` |
 | **`gimbal_payload_to_tele_joint`** | `gimbal_payload_link` | `cam_tele_link` | `-0.025633 -0.016500 -0.013660` | `-1.570796 0.0 -1.570796` |
 | **`gimbal_payload_to_wide_joint`** | `gimbal_payload_link` | `cam_wide_link` | `0.017012 -0.000740 0.014340` | `-1.570796 0.0 -1.570796` |
+| **`cam_narrow_cv_j`** | `cam_narrow_link` | `cam_narrow_cv_frame` | `0.0 0.0 0.0` | `-1.570796 0.0 -1.570796` |
+| **`cam_tele_cv_j`** | `cam_tele_link` | `cam_tele_cv_frame` | `0.0 0.0 0.0` | `-1.570796 0.0 -1.570796` |
+| **`cam_wide_cv_j`** | `cam_wide_link` | `cam_wide_cv_frame` | `0.0 0.0 0.0` | `-1.570796 0.0 -1.570796` |
 
 ---
 
@@ -116,6 +125,23 @@ To perform interactive 3D inspection of the compiled URDF coordinate frames and 
   - The sensor camera frames (`cam_narrow_link`, `cam_tele_link`, `cam_wide_link`) are transformed relative to `gimbal_payload_link` with pitch/roll orientation offsets (`rpy="-1.570796 0.0 -1.570796"`).
   - The local $+Z$ vector (Blue) defines the camera optical pointing axis directed forward toward the target scene.
   - The local $+X$ (Red) and $+Y$ (Green) vectors define horizontal and vertical image sensor pixel plane orientations respectively.
+
+### ROS REP-103 vs OpenCV Optical Camera Frame Conventions
+
+To ensure seamless integration across both robotics simulation/TF algorithms and visual perception pipelines (OpenCV, apriltag, ORB-SLAM, computer vision packages), the camera coordinate system architecture distinguishes between robot body frames and optical frames:
+
+1. **ROS Body Frame Convention (REP-103)** (`cam_*_link`):
+   - **$+X$ Axis**: Forward (longitudinal body axis)
+   - **$+Y$ Axis**: Left (lateral body axis)
+   - **$+Z$ Axis**: Up (vertical body axis)
+
+2. **Standard Optical Frame Convention (OpenCV / ISO 22900 / ROS Optical)** (`cam_*_cv_frame`):
+   - **$+Z$ Axis**: Forward along the camera optical axis (viewing direction)
+   - **$+X$ Axis**: Right across the image sensor horizontal pixel plane
+   - **$+Y$ Axis**: Down across the image sensor vertical pixel plane
+
+3. **Static Transformation Matrix** (`cam_*_cv_j`):
+   - The transformation from body frame `cam_*_link` to optical frame `cam_*_cv_frame` uses fixed offset parameters `xyz="0.0 0.0 0.0"` and `rpy="-1.570796 0.0 -1.570796"` (corresponding to a $-90^\circ$ pitch and $-90^\circ$ roll rotation: $R_{cv} = R_z(-\pi/2) R_x(-\pi/2)$).
 
 ---
 

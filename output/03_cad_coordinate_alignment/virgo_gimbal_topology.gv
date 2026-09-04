@@ -8,8 +8,11 @@ node [shape=box];
 "gimbal_payload_link" [label="gimbal_payload_link"];
 "imu_1_frame" [label="imu_1_frame"];
 "cam_narrow_link" [label="cam_narrow_link"];
+"cam_narrow_cv_frame" [label="cam_narrow_cv_frame"];
 "cam_tele_link" [label="cam_tele_link"];
+"cam_tele_cv_frame" [label="cam_tele_cv_frame"];
 "cam_wide_link" [label="cam_wide_link"];
+"cam_wide_cv_frame" [label="cam_wide_cv_frame"];
 node [shape=ellipse, color=blue, fontcolor=blue];
 "gimbal_mnt_link" -> "gimbal_mnt_to_susp_joint" [label="xyz: 0.064306 -1e-06 0.021546 \nrpy: 0 -0 0"]
 "gimbal_mnt_to_susp_joint" -> "gimbal_susp_link"
@@ -25,8 +28,14 @@ node [shape=ellipse, color=blue, fontcolor=blue];
 "gimbal_payload_to_imu_joint" -> "imu_1_frame"
 "gimbal_payload_link" -> "gimbal_payload_to_narrow_joint" [label="xyz: -0.025633 0.0165 -0.01366 \nrpy: -1.5708 -0 -1.5708"]
 "gimbal_payload_to_narrow_joint" -> "cam_narrow_link"
+"cam_narrow_link" -> "cam_narrow_cv_j" [label="xyz: 0 0 0 \nrpy: -1.5708 -0 -1.5708"]
+"cam_narrow_cv_j" -> "cam_narrow_cv_frame"
 "gimbal_payload_link" -> "gimbal_payload_to_tele_joint" [label="xyz: -0.025633 -0.0165 -0.01366 \nrpy: -1.5708 -0 -1.5708"]
 "gimbal_payload_to_tele_joint" -> "cam_tele_link"
+"cam_tele_link" -> "cam_tele_cv_j" [label="xyz: 0 0 0 \nrpy: -1.5708 -0 -1.5708"]
+"cam_tele_cv_j" -> "cam_tele_cv_frame"
 "gimbal_payload_link" -> "gimbal_payload_to_wide_joint" [label="xyz: 0.017012 -0.00074 0.01434 \nrpy: -1.5708 -0 -1.5708"]
 "gimbal_payload_to_wide_joint" -> "cam_wide_link"
+"cam_wide_link" -> "cam_wide_cv_j" [label="xyz: 0 0 0 \nrpy: -1.5708 -0 -1.5708"]
+"cam_wide_cv_j" -> "cam_wide_cv_frame"
 }

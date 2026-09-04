@@ -13,6 +13,9 @@ digraph G {
   "cam_narrow_link" [fillcolor="#F8FAFC", color="#334155", label="cam_narrow_link"];
   "cam_tele_link" [fillcolor="#F8FAFC", color="#334155", label="cam_tele_link"];
   "cam_wide_link" [fillcolor="#F8FAFC", color="#334155", label="cam_wide_link"];
+  "cam_narrow_cv_frame" [fillcolor="#F8FAFC", color="#334155", label="cam_narrow_cv_frame"];
+  "cam_tele_cv_frame" [fillcolor="#F8FAFC", color="#334155", label="cam_tele_cv_frame"];
+  "cam_wide_cv_frame" [fillcolor="#F8FAFC", color="#334155", label="cam_wide_cv_frame"];
 
   "gimbal_mnt_link" -> "gimbal_susp_link" [label="gimbal_mnt_to_susp_joint\n[fixed]", style="dashed", color="#475569"];
   "gimbal_susp_link" -> "gimbal_motor_3_link" [label="gimbal_susp_to_motor3_joint\n[revolute]", color="#0284C7", style="bold"];
@@ -23,4 +26,7 @@ digraph G {
   "gimbal_payload_link" -> "cam_narrow_link" [label="gimbal_payload_to_narrow_joint\n[fixed]", style="dashed", color="#475569"];
   "gimbal_payload_link" -> "cam_tele_link" [label="gimbal_payload_to_tele_joint\n[fixed]", style="dashed", color="#475569"];
   "gimbal_payload_link" -> "cam_wide_link" [label="gimbal_payload_to_wide_joint\n[fixed]", style="dashed", color="#475569"];
+  "cam_narrow_link" -> "cam_narrow_cv_frame" [label="cam_narrow_cv_j\n[fixed]", style="dashed", color="#475569"];
+  "cam_tele_link" -> "cam_tele_cv_frame" [label="cam_tele_cv_j\n[fixed]", style="dashed", color="#475569"];
+  "cam_wide_link" -> "cam_wide_cv_frame" [label="cam_wide_cv_j\n[fixed]", style="dashed", color="#475569"];
 }
