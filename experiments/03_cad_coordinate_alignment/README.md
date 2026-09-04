@@ -112,6 +112,9 @@ To perform interactive 3D inspection of the compiled URDF coordinate frames and 
 3. Alternatively, open the file directly in any modern Web Browser (Google Chrome, Mozilla Firefox, or Microsoft Edge).
 4. Use left-click drag to rotate the 3D scene, right-click drag to pan, and scroll to zoom in on individual link frames. Hover over any frame origin to inspect absolute world coordinates $(x, y, z)$ and relative transformation angles.
 5. **Decluttered Camera Frame Display**: Intermediate camera body links (`cam_*_link`) are automatically filtered out from rendering in the 3D canvas to avoid spatial coordinate axis overlap. The 3D inspector directly renders `cam_*_cv_frame` with explicit absolute world $(X, Y, Z)$ position labels in meters (formatted to 4 decimal places).
+6. **Rigid-Body Viewport Rotation Toggle (Chirality-Preserving)**: Use the mode toggle buttons in the top-right corner of the 3D viewport to switch between coordinate perspectives without violating right-hand rule chirality:
+   - **Mechanical View (Z Up)**: Traditional CAD mechanical engineering perspective ($+Z$ axis pointing upward: `camera.eye = (-1.8, -1.8, 1.0)`, `camera.up = (0, 0, 1)`).
+   - **Robotics View (Z Down)**: Standard robotics underslung drone payload perspective ($+Z$ axis pointing downward: `camera.eye = (-1.8, 1.8, -1.0)`, `camera.up = (0, 0, -1)`). This SO(3) rigid-body viewport rotation naturally rotates the view while strictly preserving true physical coordinate chirality.
 
 ---
 

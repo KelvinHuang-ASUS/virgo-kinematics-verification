@@ -336,6 +336,43 @@ def build_3d_interactive_figure(links: list, joints: list, link_poses: dict, axi
             x=0.01,
             y=0.85
         ),
+        updatemenus=[
+            dict(
+                type="buttons",
+                direction="right",
+                active=0,
+                x=0.98,
+                y=0.98,
+                xanchor="right",
+                yanchor="top",
+                bgcolor="#F8FAFC",
+                bordercolor="#CBD5E1",
+                borderwidth=1,
+                font=dict(color="#0F172A", size=12, family="Inter, sans-serif"),
+                buttons=[
+                    dict(
+                        label="Mechanical View (Z Up)",
+                        method="relayout",
+                        args=[{
+                            "scene.camera": dict(
+                                eye=dict(x=-1.8, y=-1.8, z=1.0),
+                                up=dict(x=0, y=0, z=1)
+                            )
+                        }]
+                    ),
+                    dict(
+                        label="Robotics View (Z Down)",
+                        method="relayout",
+                        args=[{
+                            "scene.camera": dict(
+                                eye=dict(x=-1.8, y=1.8, z=-1.0),
+                                up=dict(x=0, y=0, z=-1)
+                            )
+                        }]
+                    )
+                ]
+            )
+        ],
         margin=dict(l=20, r=20, b=20, t=80)
     )
 
