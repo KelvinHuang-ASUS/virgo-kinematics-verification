@@ -34,12 +34,12 @@ This document defines the cross-reference mapping between vendor CAD designation
 | **`YAW_AXIS` $\rightarrow$ `PITCH_AXIS`** | `yaw_to_pitch` | **`gimbal_motor2_to_motor1_joint`** | Revolute | Pitch axis rotation ($Y$-axis, $-90^\circ / +45^\circ$) |
 | **`PITCH_AXIS` $\rightarrow$ `PAYLOAD`** | `pitch_to_payload` | **`gimbal_motor1_to_payload_joint`** | Fixed | Rigid connection ($0$ DoF) |
 | **`PAYLOAD` $\rightarrow$ `IMU`** | `payload_to_imu` | **`gimbal_payload_to_imu_joint`** | Fixed | Sensor alignment ($0$ DoF) |
-| **`PAYLOAD` $\rightarrow$ `NARROW_CAM`** | `payload_to_narrow` | **`gimbal_payload_to_narrow_joint`** | Fixed | Optical alignment ($0$ DoF) |
-| **`PAYLOAD` $\rightarrow$ `TELE_CAM`** | `payload_to_tele` | **`gimbal_payload_to_tele_joint`** | Fixed | Optical alignment ($0$ DoF) |
-| **`PAYLOAD` $\rightarrow$ `WIDE_CAM`** | `payload_to_wide` | **`gimbal_payload_to_wide_joint`** | Fixed | Optical alignment ($0$ DoF) |
-| **`NARROW_CAM` $\rightarrow$ `NARROW_CV`** | N/A | **`cam_narrow_cv_j`** | Fixed | Optical frame convention rotation ($0$ DoF) |
-| **`TELE_CAM` $\rightarrow$ `TELE_CV`** | N/A | **`cam_tele_cv_j`** | Fixed | Optical frame convention rotation ($0$ DoF) |
-| **`WIDE_CAM` $\rightarrow$ `WIDE_CV`** | N/A | **`cam_wide_cv_j`** | Fixed | Optical frame convention rotation ($0$ DoF) |
+| **`PAYLOAD` $\rightarrow$ `NARROW_CAM`** | `payload_to_narrow` | **`gimbal_payload_to_narrow_joint`** | Fixed | Physical CAD assembly translation ($rpy="0 0 0"$, ROS REP-103 body frame) |
+| **`PAYLOAD` $\rightarrow$ `TELE_CAM`** | `payload_to_tele` | **`gimbal_payload_to_tele_joint`** | Fixed | Physical CAD assembly translation ($rpy="0 0 0"$, ROS REP-103 body frame) |
+| **`PAYLOAD` $\rightarrow$ `WIDE_CAM`** | `payload_to_wide` | **`gimbal_payload_to_wide_joint`** | Fixed | Physical CAD assembly translation ($rpy="0 0 0"$, ROS REP-103 body frame) |
+| **`NARROW_CAM` $\rightarrow$ `NARROW_CV`** | N/A | **`cam_narrow_cv_j`** | Fixed | Optical frame convention transformation ($rpy="-1.570796 0 -1.570796"$) |
+| **`TELE_CAM` $\rightarrow$ `TELE_CV`** | N/A | **`cam_tele_cv_j`** | Fixed | Optical frame convention transformation ($rpy="-1.570796 0 -1.570796"$) |
+| **`WIDE_CAM` $\rightarrow$ `WIDE_CV`** | N/A | **`cam_wide_cv_j`** | Fixed | Optical frame convention transformation ($rpy="-1.570796 0 -1.570796"$) |
 
 ---
 
@@ -59,3 +59,6 @@ This document defines the cross-reference mapping between vendor CAD designation
 ### Version 1.2.0 (OpenCV Camera Optical Frame Architecture Optimization)
 - **Rationale**: Extended camera links (`cam_narrow_link`, `cam_tele_link`, `cam_wide_link`) with standardized OpenCV camera optical reference frames (`cam_narrow_cv_frame`, `cam_tele_cv_frame`, `cam_wide_cv_frame`) and fixed joints (`cam_narrow_cv_j`, `cam_tele_cv_j`, `cam_wide_cv_j`).
 - **Coordinate System Alignment**: Formally bridged ROS REP-103 robot body frame conventions ($X$-axis forward, $Y$-axis left, $Z$-axis up) with standard optical frame conventions ($Z$-axis forward optical axis, $X$-axis right, $Y$-axis down) using static transform $rpy = (-1.570796, 0.0, -1.570796)$.
+
+### Version 1.2.1 (Camera Joint Rotation Alignment & REP-103 Decoupling)
+- **Rationale**: Decoupled physical camera link assembly transforms (`gimbal_payload_to_cam_*_joint`) from optical frame rotations (`cam_*_cv_j`). Set payload-to-camera body orientation to zero rotation (`rpy="0.0 0.0 0.0"`), strictly aligning `cam_*_link` with standard ROS REP-103 body conventions ($X$-forward, $Y$-left, $Z$-up). Isolated the optical frame convention transformation ($rpy="-1.570796 0.0 -1.570796"$) exclusively inside `cam_*_cv_j` to eliminate duplicate rotations across the kinematic chain.

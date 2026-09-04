@@ -36,17 +36,17 @@
   <xacro:property name="payload_to_imu_xyz" value="-0.018398 0.022833 0.023084" />
   <xacro:property name="payload_to_imu_rpy" value="3.141593 1.570796 0.0" />
 
-  <!-- 7. Payload -> Narrow Camera Transform -->
+  <!-- 7. Payload -> Narrow Camera Transform (REP-103 Body Frame Alignment) -->
   <xacro:property name="payload_to_narrow_xyz" value="-0.025633 0.016500 -0.013660" />
-  <xacro:property name="payload_to_narrow_rpy" value="-1.570796 0.0 -1.570796" />
+  <xacro:property name="payload_to_narrow_rpy" value="0.0 0.0 0.0" />
 
-  <!-- 8. Payload -> Tele Camera Transform -->
+  <!-- 8. Payload -> Tele Camera Transform (REP-103 Body Frame Alignment) -->
   <xacro:property name="payload_to_tele_xyz" value="-0.025633 -0.016500 -0.013660" />
-  <xacro:property name="payload_to_tele_rpy" value="-1.570796 0.0 -1.570796" />
+  <xacro:property name="payload_to_tele_rpy" value="0.0 0.0 0.0" />
 
-  <!-- 9. Payload -> Wide Camera Transform -->
+  <!-- 9. Payload -> Wide Camera Transform (REP-103 Body Frame Alignment) -->
   <xacro:property name="payload_to_wide_xyz" value="0.017012 -0.000740 0.014340" />
-  <xacro:property name="payload_to_wide_rpy" value="-1.570796 0.0 -1.570796" />
+  <xacro:property name="payload_to_wide_rpy" value="0.0 0.0 0.0" />
 
   <!-- 10. Camera Link -> OpenCV Visual Frame Transform -->
   <xacro:property name="cam_link_to_cv_xyz" value="0.0 0.0 0.0" />

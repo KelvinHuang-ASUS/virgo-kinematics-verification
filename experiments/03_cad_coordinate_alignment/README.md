@@ -62,9 +62,9 @@ The 12 coordinate transformations connecting the 13 nodes are defined in [`xacro
 | **`gimbal_motor2_to_motor1_joint`** | `gimbal_motor_2_link` | `gimbal_motor_1_link` | `0.0 0.054600 0.078100` | `1.570796 1.570796 0.0` |
 | **`gimbal_motor1_to_payload_joint`** | `gimbal_motor_1_link` | `gimbal_payload_link` | `-0.000069 -0.000666 0.060957` | `-1.570796 0.0 -2.783801` |
 | **`gimbal_payload_to_imu_joint`** | `gimbal_payload_link` | `imu_1_frame` | `-0.018398 0.022833 0.023084` | `3.141593 1.570796 0.0` |
-| **`gimbal_payload_to_narrow_joint`** | `gimbal_payload_link` | `cam_narrow_link` | `-0.025633 0.016500 -0.013660` | `-1.570796 0.0 -1.570796` |
-| **`gimbal_payload_to_tele_joint`** | `gimbal_payload_link` | `cam_tele_link` | `-0.025633 -0.016500 -0.013660` | `-1.570796 0.0 -1.570796` |
-| **`gimbal_payload_to_wide_joint`** | `gimbal_payload_link` | `cam_wide_link` | `0.017012 -0.000740 0.014340` | `-1.570796 0.0 -1.570796` |
+| **`gimbal_payload_to_narrow_joint`** | `gimbal_payload_link` | `cam_narrow_link` | `-0.025633 0.016500 -0.013660` | `0.0 0.0 0.0` |
+| **`gimbal_payload_to_tele_joint`** | `gimbal_payload_link` | `cam_tele_link` | `-0.025633 -0.016500 -0.013660` | `0.0 0.0 0.0` |
+| **`gimbal_payload_to_wide_joint`** | `gimbal_payload_link` | `cam_wide_link` | `0.017012 -0.000740 0.014340` | `0.0 0.0 0.0` |
 | **`cam_narrow_cv_j`** | `cam_narrow_link` | `cam_narrow_cv_frame` | `0.0 0.0 0.0` | `-1.570796 0.0 -1.570796` |
 | **`cam_tele_cv_j`** | `cam_tele_link` | `cam_tele_cv_frame` | `0.0 0.0 0.0` | `-1.570796 0.0 -1.570796` |
 | **`cam_wide_cv_j`** | `cam_wide_link` | `cam_wide_cv_frame` | `0.0 0.0 0.0` | `-1.570796 0.0 -1.570796` |
@@ -128,9 +128,9 @@ To perform interactive 3D inspection of the compiled URDF coordinate frames and 
   - **Blue Axis**: $+Z$ Direction (Local Yaw vector / vertical height axis)
 
 - **Optical Camera Vector Rules**:
-  - The sensor camera frames (`cam_narrow_link`, `cam_tele_link`, `cam_wide_link`) are transformed relative to `gimbal_payload_link` with pitch/roll orientation offsets (`rpy="-1.570796 0.0 -1.570796"`).
-  - The local $+Z$ vector (Blue) defines the camera optical pointing axis directed forward toward the target scene.
-  - The local $+X$ (Red) and $+Y$ (Green) vectors define horizontal and vertical image sensor pixel plane orientations respectively.
+  - The physical sensor camera body frames (`cam_narrow_link`, `cam_tele_link`, `cam_wide_link`) are mounted relative to `gimbal_payload_link` with pure translational CAD offsets (`rpy="0.0 0.0 0.0"`), aligning their orientation with ROS REP-103 body conventions ($+X$ forward, $+Y$ left, $+Z$ up).
+  - The dedicated optical camera frames (`cam_*_cv_frame`) carry the optical orientation transformation (`rpy="-1.570796 0.0 -1.570796"`) via `cam_*_cv_j`.
+  - For optical frames, the local $+Z$ vector (Blue) defines the camera optical pointing axis directed forward toward the target scene, while local $+X$ (Red) and $+Y$ (Green) vectors define horizontal (right) and vertical (down) sensor pixel plane orientations respectively.
 
 ### ROS REP-103 vs OpenCV Optical Camera Frame Conventions
 

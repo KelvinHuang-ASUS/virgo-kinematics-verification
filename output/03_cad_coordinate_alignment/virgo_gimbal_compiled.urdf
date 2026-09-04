@@ -166,19 +166,19 @@
   <joint name="gimbal_payload_to_narrow_joint" type="fixed">
     <parent link="gimbal_payload_link"/>
     <child link="cam_narrow_link"/>
-    <origin rpy="-1.570796 0.0 -1.570796" xyz="-0.025633 0.016500 -0.013660"/>
+    <origin rpy="0.0 0.0 0.0" xyz="-0.025633 0.016500 -0.013660"/>
   </joint>
   <!-- Joint 8: Payload to Tele Camera (Fixed) -->
   <joint name="gimbal_payload_to_tele_joint" type="fixed">
     <parent link="gimbal_payload_link"/>
     <child link="cam_tele_link"/>
-    <origin rpy="-1.570796 0.0 -1.570796" xyz="-0.025633 -0.016500 -0.013660"/>
+    <origin rpy="0.0 0.0 0.0" xyz="-0.025633 -0.016500 -0.013660"/>
   </joint>
   <!-- Joint 9: Payload to Wide Camera (Fixed) -->
   <joint name="gimbal_payload_to_wide_joint" type="fixed">
     <parent link="gimbal_payload_link"/>
     <child link="cam_wide_link"/>
-    <origin rpy="-1.570796 0.0 -1.570796" xyz="0.017012 -0.000740 0.014340"/>
+    <origin rpy="0.0 0.0 0.0" xyz="0.017012 -0.000740 0.014340"/>
   </joint>
   <!-- Joint 10: Narrow Camera Link to OpenCV Visual Frame (Fixed) -->
   <joint name="cam_narrow_cv_j" type="fixed">
